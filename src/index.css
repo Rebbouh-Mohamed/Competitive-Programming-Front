@@ -1,0 +1,33 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  
+}
+html {
+  scroll-behavior: smooth;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-family: inter;
+  color: #b1b1b1;
+  background: var(--Dark-Gray, #121212);
+}
+pre {
+  line-height: 20px;
+  background-color: #222222 !important;
+}
+h3{
+  color: red
+}
+/* Ensure the app container fills the entire viewport height */
+.app-container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Main content area should take up remaining space */
+.content {
+  flex: 1;
+}

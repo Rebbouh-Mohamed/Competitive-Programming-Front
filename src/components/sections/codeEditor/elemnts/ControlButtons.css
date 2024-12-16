@@ -1,0 +1,33 @@
+.button-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    
+  }
+  
+  .control-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 4px;
+    transition: background-color 0.3s, transform 0.1s;
+  }
+  
+  /* Specific styles for redo button */
+  .control-button:hover {
+    background-color: #444; /* Slightly lighter background */
+  }
+  
+  .control-button:active {
+    background-color: rgba(255, 255, 255, 0.24); /* Shrinks slightly on click */
+  }
+  
+  img {
+    width: 24px;
+    height: 24px;
+  }
+  
