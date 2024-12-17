@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState , forwardRef} from "react";
 import showedeye from "../../../assets/icons/eye/showedeye.svg";
 import hiddeneye from "../../../assets/icons/eye/hiddeneye.svg";
+
 const styles = {
   input: (isFocused) => ({
     flex: "1 0 0",
@@ -8,8 +9,8 @@ const styles = {
     padding: "0.75rem 1rem",
     background: isFocused ? "transparent" : "var(--Medium-Gray, #414141)",
     borderRadius: "1rem",
-    border: isFocused ? "transparent" : "none", // Focused border color
-    outline: isFocused ? "2px solid var(--White, #FFF)" : "none", // Focused border color
+    border: isFocused ? "transparent" : "none",
+    outline: isFocused ? "2px solid var(--White, #FFF)" : "none",
     fontFamily: "Inter",
     fontSize: "16px",
     fontWeight: "700",
@@ -42,53 +43,45 @@ const styles = {
     transition: "border-color 0.3s ease",
   },
 };
-const Inputbar = ({
-  placeholder,
-  isPassword,
-  value,
-  onChange,
-  showAsEntered,
-}) => {
-  const [showPassword, setShowPassword] = useState(false); // Track visibility of the password
-  const [inputValue, setInputValue] = useState(value || ""); // Store the current input value
-  const [fullInputValue, setFullInputValue] = useState(""); // Store the accumulated value
-  const [isFocused, setIsFocused] = useState(false); // Track focus state
-  // Handle changes in the input field
+
+const Inputbar = forwardRef(({ placeholder, isPassword, value, onChange, showAsEntered }, ref) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [inputValue, setInputValue] = useState(value || "");
+  const [fullInputValue, setFullInputValue] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
+
   const handleChange = (e) => {
-    // Check if e.target exists to avoid the error
     if (!e.target) return;
-  
     const input = e.target.value;
     const newValue =
       input.length < fullInputValue.length
         ? input
         : fullInputValue + input.slice(fullInputValue.length);
-  
     setInputValue(input);
     setFullInputValue(newValue);
     onChange(newValue);
   };
-  
+
   const handleFocus = () => {
-    setIsFocused(true); // Set focused state to true
+    setIsFocused(true);
   };
   const handleBlur = () => {
-    setIsFocused(false); // Set focused state to false
-  };
-  // Toggle password visibility
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword); // Toggle the visibility between show and hide
+    setIsFocused(false);
   };
 
-  // Get either the password as text or as masked dots based on the visibility
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const getMaskedValue = () => {
     if (showPassword && showAsEntered) {
-      return fullInputValue; // Show accumulated input when showing password
+      return fullInputValue;
     } else if (!showPassword) {
-      return "•".repeat(fullInputValue.length); // Show dots if the password is hidden
+      return "•".repeat(fullInputValue.length);
     }
-    return fullInputValue; // Default to showing the accumulated input value
+    return fullInputValue;
   };
+
   return (
     <>
       <style>
@@ -104,17 +97,18 @@ const Inputbar = ({
         `}
       </style>
       <input
-        type="text" // Always use text for custom masking (no native password dots)
+        ref={ref} // Attach the ref to the input element
+        type="text"
         placeholder={placeholder}
-        value={isPassword ? getMaskedValue() : fullInputValue} // Show either the actual password or the dots based on visibility
-        onChange={handleChange} // Handle the input changes
-        onFocus={handleFocus} // Handle focus event
-        style={styles.input(isFocused)} // Pass focused state to style
-        onBlur={handleBlur} // Handle blur event
+        value={isPassword ? getMaskedValue() : fullInputValue}
+        onChange={handleChange}
+        onFocus={handleFocus}
+        style={styles.input(isFocused)}
+        onBlur={handleBlur}
       />
       {isPassword && (
         <button
-          onClick={togglePasswordVisibility} // Toggle show/hide password
+          onClick={togglePasswordVisibility}
           style={styles.button}
           onFocus={handleFocus}
           onBlur={handleBlur}
@@ -129,29 +123,23 @@ const Inputbar = ({
           ) : (
             ""
           )}
-          {/* Show/hide icon */}
         </button>
       )}
     </>
   );
-};
-
-const InputField = ({
-  placeholder,
-  isPassword,
-  value,
-  onChange,
-  showAsEntered,
-}) => (
+});
+const InputField = forwardRef(({ placeholder, isPassword, value, onChange, showAsEntered }, ref) => (
   <div style={styles.container}>
     <Inputbar
+      ref={ref} // Forward the ref to Inputbar
       placeholder={placeholder}
       isPassword={isPassword}
       value={value}
       onChange={onChange}
-      showAsEntered={showAsEntered} // Pass down the new prop
+      showAsEntered={showAsEntered}
     />
   </div>
-);
+));
+
 
 export default InputField;

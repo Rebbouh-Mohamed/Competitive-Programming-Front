@@ -96,7 +96,7 @@ const GRound = ({ Day = 0, Time }) => {
               handleProblemClick={handleProblemClick} // Handle problem click
             />
           )}
-          {/* {!showLanding && <Push />} */}
+          
         </>
       )}
     </div>

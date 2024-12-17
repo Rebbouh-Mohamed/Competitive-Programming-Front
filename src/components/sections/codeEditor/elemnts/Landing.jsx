@@ -16,9 +16,8 @@ import { useDispatch } from "react-redux";
 import Push from "../../Push";
 import { testcode } from "../../../../../redux/test/action";
 
-
-const Landing = ({problem}) => {
-  const dispatch=useDispatch()
+const Landing = ({ problem }) => {
+  const dispatch = useDispatch();
   const [isScaled, setIsScaled] = useState(false);
   const defaultcode = `${problem.codejs}`;
   const toggleScale = () => {
@@ -43,7 +42,12 @@ const Landing = ({problem}) => {
 
   const onSelectChange = (selectedLanguage) => {
     setLanguage(selectedLanguage);
-    dispatch(postDefaultCode({ problemId: problem.id, language: selectedLanguage.value }))
+    dispatch(
+      postDefaultCode({
+        problemId: problem.id,
+        language: selectedLanguage.value,
+      })
+    )
       .unwrap()
       .then((data) => {
         setCode(data.code_snippet); // Set default code on success
@@ -53,7 +57,6 @@ const Landing = ({problem}) => {
         setCode(""); // Use fallback code if there's an error
       });
   };
-
 
   useEffect(() => {
     if (enterPress && ctrlPress) {
@@ -75,13 +78,13 @@ const Landing = ({problem}) => {
     }
   };
 
-const handleCompile = () => {
+  const handleCompile = () => {
     setProcessing(true);
     const formData = {
       language: language.value,
       code: code,
     };
-    dispatch(testcode({ problem_id: problem.id, data: formData}))
+    dispatch(testcode({ problem_id: problem.id, data: formData }))
       .unwrap()
       .then((data) => {
         setOutputDetails(data.percentage); // Set default code on success
@@ -89,7 +92,6 @@ const handleCompile = () => {
       .catch((err) => {
         console.log("Error fetching default code:", err);
       });
-
   };
 
   const checkStatus = async (token) => {
@@ -167,6 +169,13 @@ const handleCompile = () => {
   };
 
   return (
+    <div style={{
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",
+      alignItems: "center",
+    }}>
+    
     <div
       style={{
         display: "flex",
@@ -175,11 +184,11 @@ const handleCompile = () => {
         padding: "32px 0",
         height: "612px",
         flex: "1 0 0",
-        width:"1440px",
+        width: "1440px",
         alignSelf: "stretch",
-        justifyContent:"space-between",
+        justifyContent: "space-between",
       }}
-    >
+      >
       <Problem isScaled={isScaled} problem={problem} />
       <div
         style={{
@@ -188,7 +197,6 @@ const handleCompile = () => {
           alignItems: "flex-start",
           borderRadius: "16px",
           background: "var(--White-12, rgba(255, 255, 255, 0.12))",
-          
         }}
       >
         <LanguagesDropdown
@@ -196,25 +204,22 @@ const handleCompile = () => {
           onScale={toggleScale}
           toggleRefresh={toggleRefresh}
           onSelectChange={onSelectChange}
-        />
+          />
         <CodeEditorWindow
           isScaled={isScaled}
           code={code}
           onChange={onChange}
           language={language?.value}
           theme={theme.value}
-        />
-         {/* <div style={{ marginTop: "auto", width: "100%" }}>
-         <Push 
-            func={() => handleCompile(code, language)} 
-            value={outputDetails ? outputDetails: 0} 
           />
-          </div> */}
+        <div style={{ marginTop: "auto", width: "100%" }}></div>
       </div>
     </div>
-
-    
-    
+      <Push
+        func={() => handleCompile(code, language)}
+        value={outputDetails ? outputDetails : 0}
+      />
+        </div>
   );
 };
 

@@ -1,111 +1,93 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux"; // Import useDispatch and useSelector from Redux
+import React, { useState, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux"; 
 import { useNavigate } from "react-router-dom";
 import InputField from "../components/ui-elements/input/InputField";
 import PrimaryButton from "../components/ui-elements/buttons/PrimaryButton.jsx";
-import Biglogo from "../../public/images/Biglogo.jsx";
-import ToastDemo from "../components/toasts/ToastDemo.jsx"; // Import Toast component
-import { loginUser } from "../../redux/login/action"; // Redux action
+import Biglogo from "../../public/images/Biglogo.jsx"
+import ToastRed from "../components/toasts/ToastRed.jsx"; 
+import { loginUser } from "../../redux/login/action"; 
+import styles from "./styles.json";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isLoading, error } = useSelector((state) => state.login); // Get loading and error from Redux store
+  const { isLoading, error } = useSelector((state) => state.login);
   const [localEmail, setLocalEmail] = useState("");
   const [localPassword, setLocalPassword] = useState("");
-  const [toastMessage, setToastMessage] = useState(""); // State for controlling the toast
+  const [toastMessage, setToastMessage] = useState("");
+
+  // Refs for the input fields
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent default form submission
+    if (e) e.preventDefault();
 
-    if (isLoading) return; // Prevent submission when loading
+    if (isLoading) return;
+
+    // Check if any input is empty and focus on it
+    if (!localEmail) {
+      emailRef.current.focus();
+      return;
+    }
+    if (!localPassword) {
+      passwordRef.current.focus();
+      return;
+    }
 
     try {
       const result = await dispatch(
         loginUser({ username: localEmail, password: localPassword })
       ).unwrap();
 
-      //console.log("Login action result:", result);
-
       if (!result) {
         console.error("Incomplete login response:", result);
-        setToastMessage("Login failed. Please try again."); // Set error message for toast
+        setToastMessage("Login failed. Please try again.");
         return;
       }
 
-      // Navigate to dashboard after successful login
       navigate("/lobby");
     } catch (err) {
       console.error("Error during login process:", err);
-      setToastMessage(err.message); // Set error message for toast
+      setToastMessage(err.message);
     }
   };
 
-  const Caption = "By joining, you agree to ITCP's Privacy Policy.";
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Enter") {
+        handleSubmit(); 
+      }
+    };
 
-  const styles = {
-    container: {
-      display: "flex",
-      width: "37.5rem",
-      flexDirection: "column",
-      alignItems: "center",
-      gap: "2.5rem",
-    },
-    title: {
-      color: "var(--White, #FFF)",
-      textAlign: "center",
-      fontFamily: "Inter",
-      fontSize: "2rem",
-      fontStyle: "normal",
-      fontWeight: "700",
-      lineHeight: "2.5rem",
-    },
-    form: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "flex-start",
-      gap: "1.5rem",
-      alignSelf: "stretch",
-    },
-    errorMessage: {
-      color: "red",
-    },
-    loadingText: {
-      color: "var(--White, #FFF)",
-    },
-    caption: {
-      color: "var(--Light-Gray, #929292)",
-      textAlign: "center",
-      fontFamily: "Inter",
-      fontSize: "0.875rem",
-      fontStyle: "normal",
-      fontWeight: "400",
-      lineHeight: "1.25rem",
-      alignSelf: "stretch",
-    },
-  };
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [localEmail, localPassword, isLoading]);
+
+  const Caption = "By joining, you agree to ITCP's Privacy Policy.";
 
   return (
     <div style={styles.container}>
       <Biglogo />
       <p style={styles.title}>Competitive Programming</p>
       <div style={styles.form} onSubmit={handleSubmit}>
-        {/* Input field for email */}
         <InputField
           placeholder="Enter username"
           value={localEmail}
+          ref={emailRef} // Attach ref to the input field
           onChange={(value) => setLocalEmail(value)}
         />
-        {/* Input field for password */}
         <InputField
           placeholder="Enter password"
           value={localPassword}
           isPassword
-          onChange={(value) => setLocalPassword(value)} // Ensure value is passed
+          ref={passwordRef} // Attach ref to the input field
+          onChange={(value) => setLocalPassword(value)}
         />
-        {/* Display errors if exists */}
         {error && <p style={styles.errorMessage}>{error}</p>}
-        {/* Show loading or submit button */}
         {isLoading ? (
           <p style={styles.loadingText}>Loading ...</p>
         ) : (
@@ -114,16 +96,15 @@ const Login = () => {
             full
             type="submit"
             isicon={false}
-            onClick={handleSubmit} // Pass handleSubmit function here
-            disabled={isLoading} // Disable button when loading
+            onClick={handleSubmit}
+            disabled={isLoading}
           />
         )}
 
         <div style={styles.caption}>{Caption}</div>
       </div>
 
-      {/* Show toast notification if there's an error */}
-      <ToastDemo message={toastMessage} onClose={() => setToastMessage("")} />
+      <ToastRed message={toastMessage} onClose={() => setToastMessage("")} />
     </div>
   );
 };

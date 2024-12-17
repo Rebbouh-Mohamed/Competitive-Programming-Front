@@ -8,7 +8,7 @@ const defineTheme = async (theme) => {
   try {
     const [monaco, themeData] = await Promise.all([
       loader.init(),
-      import(`../../../../assets/theme/${monacoThemes[theme]}.json`)
+      import('../../../../assets/theme/Monokai.json')
     ]);
     monaco.editor.defineTheme(theme, themeData);
   } catch (error) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect ,useCallback} from "react";
 import ReactLoading from "react-loading";
 import PrimaryButton from "../ui-elements/buttons/PrimaryButton"; // Importing a reusable primary button component
 import SecondaryButton from "../ui-elements/buttons/SecondaryButton"; // Importing a reusable secondary button component
@@ -8,8 +8,10 @@ import error from "../../assets/icons/error.svg"; // Importing the error icon
 
 // Importing handleCompile function
 
-// Component for rendering the buttons
+
 function Thebuttons({ func }) {
+  const [isTested, setIsTested] = useState(true);
+
   const ButtonsStyle = {
     display: "flex",
     width: "100%",
@@ -17,6 +19,12 @@ function Thebuttons({ func }) {
     alignItems: "center",
     gap: "16px",
   };
+
+  // Handler to run func and update state
+  const handleTestClick = useCallback(() => {
+    func();           // Run the provided function
+    setIsTested(false); // Update state to trigger re-render
+  }, [func]);
 
   return (
     <div style={ButtonsStyle}>
@@ -26,7 +34,7 @@ function Thebuttons({ func }) {
         isfull={false}
         type="submit"
         isicon
-        onClick={func} // Passes the func prop
+        onClick={handleTestClick} // Runs the handler
       />
 
       <PrimaryButton
@@ -35,10 +43,12 @@ function Thebuttons({ func }) {
         type="submit"
         isfull={false}
         isicon
+        disabled={isTested} // Renders differently if tested
       />
     </div>
   );
 }
+
 
 // Component for displaying accuracy with a corresponding icon and text
 
@@ -113,12 +123,7 @@ function Accuracy({ value }) {
   return (
     <div style={AccuracyStyle}>
       {isChecking ? (
-        <ReactLoading
-          type="spin"
-          color="#929292"
-          height="24px"
-          width="24px"
-        />
+        <ReactLoading type="spin" color="#929292" height="24px" width="24px" />
       ) : (
         <img src={feedbackIcon} alt="Accuracy icon" />
       )}
@@ -131,14 +136,13 @@ function Accuracy({ value }) {
 }
 
 // Component for rendering the entire Push section
-function Push({ value = 101,func}) {
+function Push({ value = 101, func }) {
   // Inline styling for the Push container
   const PushStyles = {
     display: "flex", // Arrange child components in a horizontal row
     width: "90rem", // Set the container width
     justifyContent: "space-between", // Space out child components evenly
     alignItems: "center", // Vertically align items to the center
-    
   };
 
   return (
