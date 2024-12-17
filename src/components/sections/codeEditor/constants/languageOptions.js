@@ -1,31 +1,31 @@
 export const languageOptions = [
   {
-    value: "JS",
+    value: "js",
     label: "javascript",
   },
   {
-    value: "C",
-    label: "c",
+    value: "c",
+    label: "C",
   },
   {
-    value: "CPP",
-    label: "cpp",
+    value: "cpp",
+    label: "CPP",
   },
   {
-    value: "CS",
+    value: "cs",
     label: "C#",
   },
   {
-    value: "GO",
+    value: "go",
     label: "GO",
   },
   {
    
-    value: "JAVA",
+    value: "java",
     label: "JAVA",
   },
   {
-    value: "PY",
+    value: "py",
     label: "python",
   }
 ];

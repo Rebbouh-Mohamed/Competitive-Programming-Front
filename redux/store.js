@@ -2,6 +2,8 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 import createStore from "react-auth-kit/createStore";
 import problemSlice from "./problems/problemSlice"
+import testSlice from "./test/testSlice"
+import { Percent } from "@mui/icons-material";
 // React Auth Kit store setup
 const authStore = createStore({
   authName: "_auth", // Name of the cookie for storing authentication data
@@ -96,6 +98,7 @@ const store = configureStore({
     login: loginSlice.reducer,
     contests: contestsSlice.reducer, 
     problems:problemSlice,// Add contests slice here
+    percentage:testSlice,
   },
 });
 

@@ -9,22 +9,18 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { defineTheme } from "../lib/defineTheme";
 import useKeyPress from "../hooks/useKeyPress";
-import OutputWindow from "./OutputWindow";
-import CustomInput from "./CustomInput";
-import OutputDetails from "./OutputDetails";
 import LanguagesDropdown from "./LanguagesDropdown";
 import "./CodeEditorWindow.css";
 import { postDefaultCode } from "../../../../../redux/code/action";
 import { useDispatch } from "react-redux";
-
-
+import Push from "../../Push";
+import { testcode } from "../../../../../redux/test/action";
 
 
 const Landing = ({problem}) => {
   const dispatch=useDispatch()
   const [isScaled, setIsScaled] = useState(false);
   const defaultcode = `${problem.codejs}`;
-  console.log(problem.codejs)
   const toggleScale = () => {
     setIsScaled((prev) => !prev);
   };
@@ -63,7 +59,7 @@ const Landing = ({problem}) => {
     if (enterPress && ctrlPress) {
       console.log("enterPress", enterPress);
       console.log("ctrlPress", ctrlPress);
-      handleCompile();
+      // handleCompile();
     }
   }, [ctrlPress, enterPress]);
 
@@ -79,47 +75,21 @@ const Landing = ({problem}) => {
     }
   };
 
-  const handleCompile = () => {
+const handleCompile = () => {
     setProcessing(true);
     const formData = {
-      language_id: language.id,
-      source_code: btoa(code),
-      stdin: btoa(customInput),
+      language: language.value,
+      code: code,
     };
-    console.log(code);
-    const options = {
-      method: "POST",
-      url: process.env.REACT_APP_RAPID_API_URL,
-      params: { base64_encoded: "true", fields: "*" },
-      headers: {
-        "content-type": "application/json",
-        "X-RapidAPI-Host": process.env.REACT_APP_RAPID_API_HOST,
-        "X-RapidAPI-Key": process.env.REACT_APP_RAPID_API_KEY,
-      },
-      data: formData,
-    };
-
-    axios
-      .request(options)
-      .then(function (response) {
-        console.log("res.data", response.data);
-        const token = response.data.token;
-        checkStatus(token);
+    dispatch(testcode({ problem_id: problem.id, data: formData}))
+      .unwrap()
+      .then((data) => {
+        setOutputDetails(data.percentage); // Set default code on success
       })
       .catch((err) => {
-        let error = err.response ? err.response.data : err;
-        let status = err.response.status;
-        console.log("status", status);
-        if (status === 429) {
-          console.log("too many requests", status);
-          showErrorToast(
-            `Quota of 100 requests exceeded for the Day! Please read the blog on freeCodeCamp to learn how to setup your own RAPID API Judge0!`,
-            10000
-          );
-        }
-        setProcessing(false);
-        console.log("catch block...", error);
+        console.log("Error fetching default code:", err);
       });
+
   };
 
   const checkStatus = async (token) => {
@@ -234,8 +204,17 @@ const Landing = ({problem}) => {
           language={language?.value}
           theme={theme.value}
         />
+         <div style={{ marginTop: "auto", width: "100%" }}>
+         <Push 
+            func={() => handleCompile(code, language)} 
+            value={outputDetails ? outputDetails: 0} 
+          />
+          </div>
       </div>
     </div>
+
+    
+    
   );
 };
 

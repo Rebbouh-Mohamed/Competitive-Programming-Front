@@ -7,8 +7,8 @@ import Push from "../components/sections/Push.jsx";
 import { getproblem } from "../../redux/problems/action.js";
 import { getUpcomingContest } from "../../redux/contests/action"; // Action to get the contest data
 
-// Import the action to fetch problems
 
+// Import the action to fetch problems
 const GameRoundStyle = {
   display: "flex",
   width: "1440px",
@@ -89,14 +89,14 @@ const GRound = ({ Day = 0, Time }) => {
       ) : (
         <>
           {!showLanding ? (
-            <Landing problem={selectedProblem} /> // Pass selected problem safely
+            <Landing problem={selectedProblem}/> // Pass selected problem safely
           ) : (
             <ProblemSection
               problems={problems}
               handleProblemClick={handleProblemClick} // Handle problem click
             />
           )}
-          {!showLanding && <Push />}
+          {/* {!showLanding && <Push />} */}
         </>
       )}
     </div>

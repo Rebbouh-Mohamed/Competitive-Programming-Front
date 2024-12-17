@@ -6,43 +6,41 @@ import greencheck from "../../assets/icons/greencheck.svg"; // Importing the gre
 import warning from "../../assets/icons/warning.svg"; // Importing the warning icon
 import error from "../../assets/icons/error.svg"; // Importing the error icon
 
+// Importing handleCompile function
+
 // Component for rendering the buttons
-function Thebuttons() {
-  // Inline styling for the button container
+function Thebuttons({ func }) {
   const ButtonsStyle = {
-    display: "flex", // Arrange buttons in a horizontal row
-    width: "100%", // Set container to full width
-    justifyContent: "flex-end", // Align buttons to the right
-    alignItems: "center", // Vertically align items to the center
-    gap: "16px", // Add space between buttons
-    alignSelf: "stretch", // Allow the container to stretch in its parent
+    display: "flex",
+    width: "100%",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    gap: "16px",
   };
 
   return (
     <div style={ButtonsStyle}>
-      {/* Render a secondary button with specific props */}
       <SecondaryButton
-        txt="Test" // Button text
-        to="game-round" // Link or action target
-        isfull={false} // Controls full-width styling
-        type="submit" // HTML button type
-        isicon // Indicates if the button includes an icon
+        txt="Test"
+        to="game-round"
+        isfull={false}
+        type="submit"
+        isicon
+        onClick={func} // Passes the func prop
       />
 
-      {/* Render a primary button with specific props */}
       <PrimaryButton
-        txt="Submit" // Button text
-        to="game-round" // Link or action target
-        type="submit" // HTML button type
-        isfull={false} // Controls full-width styling
-        isicon // Indicates if the button includes an icon
+        txt="Submit"
+        to="game-round"
+        type="submit"
+        isfull={false}
+        isicon
       />
     </div>
   );
 }
 
 // Component for displaying accuracy with a corresponding icon and text
-
 
 function Accuracy({ value }) {
   // Inline styling for the accuracy container
@@ -133,7 +131,7 @@ function Accuracy({ value }) {
 }
 
 // Component for rendering the entire Push section
-function Push({ value = 101 }) {
+function Push({ value = 101,func}) {
   // Inline styling for the Push container
   const PushStyles = {
     display: "flex", // Arrange child components in a horizontal row
@@ -148,7 +146,7 @@ function Push({ value = 101 }) {
       {/* Render the Accuracy component and pass the value as a prop */}
       <Accuracy value={value} />
       {/* Render the Thebuttons component */}
-      <Thebuttons />
+      <Thebuttons func={func} />
     </div>
   );
 }
