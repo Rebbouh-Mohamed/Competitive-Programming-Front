@@ -54,7 +54,7 @@ const Landing = ({problem}) => {
       })
       .catch((err) => {
         console.error("Error fetching default code:", err);
-        setCode(defaultcode); // Use fallback code if there's an error
+        setCode(""); // Use fallback code if there's an error
       });
   };
 
