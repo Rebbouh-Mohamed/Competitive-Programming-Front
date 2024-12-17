@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Solve and navigate problems strategically",
+    "description": "At the start of the game, select any problem from the problem list to\nbegin working on it in the problem workspace. Focus on solving as many\nproblems as possible to maximize your score."
+  },
+  {
+    "title": "Timed gameplay",
+    "description": "Each game is limited to 60 minutes. Use your time wisely to navigate and\nsolve problems effectively."
+  },
+  {
+    "title": "Work in the problem workspace",
+    "description": "For each selected problem, use the problem workspace to write and test\nyour solution. You can save solutions and check their accuracy before\nfinal submission."
+  },
+  {
+    "title": "Submit before time runs out",
+    "description": "Ensure all solutions are submitted before the timer expires.\nLate submissions will not be accepted."
+  },
+  {
+    "title": "Leaderboard rankings",
+    "description": "Your rank is based on the number of correct solutions and your\ncompletion time. Aim for accuracy and efficiency to climb the\nleaderboard."
+  },
+  {
+    "title": "Crown the winners",
+    "description": "At the end of Day 1, the top 20 participants qualify for Day 2. Make every\nproblem count!"
+  },
+  {
+    "title": "Fair play required",
+    "description": "Using unauthorized tools, sharing answers, or engaging in any form of\ncheating will lead to disqualification. Compete honestly to uphold the\ngame’s integrity."
+  }
+]

@@ -1,0 +1,41 @@
+{
+  "container": {
+    "display": "flex",
+    "width": "37.5rem",
+    "flexDirection": "column",
+    "alignItems": "center",
+    "gap": "2.5rem"
+  },
+  "title": {
+    "color": "var(--White, #FFF)",
+    "textAlign": "center",
+    "fontFamily": "Inter",
+    "fontSize": "2rem",
+    "fontStyle": "normal",
+    "fontWeight": "700",
+    "lineHeight": "2.5rem"
+  },
+  "form": {
+    "display": "flex",
+    "flexDirection": "column",
+    "alignItems": "flex-start",
+    "gap": "1.5rem",
+    "alignSelf": "stretch"
+  },
+  "errorMessage": {
+    "color": "red"
+  },
+  "loadingText": {
+    "color": "var(--White, #FFF)"
+  },
+  "caption": {
+    "color": "var(--Light-Gray, #929292)",
+    "textAlign": "center",
+    "fontFamily": "Inter",
+    "fontSize": "0.875rem",
+    "fontStyle": "normal",
+    "fontWeight": "400",
+    "lineHeight": "1.25rem",
+    "alignSelf": "stretch"
+  }
+}

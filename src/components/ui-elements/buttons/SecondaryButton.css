@@ -1,0 +1,63 @@
+/* SecondaryButtonSecondary.css */
+
+.buttonSecondary {
+    display: flex;
+    padding: 0.75rem 1rem;
+    justify-content: center;
+    color: white;
+    align-items: center;
+    border-radius: 3.125rem;
+    transition: all 0.3s ease;
+    background-color: #414141;
+    gap: 0.5rem;
+    border: none;
+    cursor: pointer;
+    flex: 1 0 0;
+    align-self: stretch;
+  }
+  
+  .buttonSecondary--hovered {
+    background-color: rgba(255, 255, 255, 0.12); /* Light gray hover */
+  }
+  
+  .buttonSecondary--pressed {
+    background-color: rgba(255, 255, 255, 0.24); /* Darker gray when pressed */
+  }
+  
+  .buttonSecondary--clicked {
+    background-color: #414141; /* Subtle white */
+  }
+  
+  .buttonSecondary--disabled {
+    background-color: rgba(255, 255, 255, 0.12);
+    cursor: not-allowed;
+    color: var(--Light-Gray, #929292);
+    opacity: 0.6;
+  }
+  
+  .buttonSecondaryText {
+    font-family: "Inter", sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5rem;
+    transition: color 0.3s ease;
+  }
+  
+  .buttonSecondaryText--clicked {
+    color: white;
+  }
+  
+  .linkWrapper {
+    text-decoration: none;
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+  .buttonSecondary-content {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
