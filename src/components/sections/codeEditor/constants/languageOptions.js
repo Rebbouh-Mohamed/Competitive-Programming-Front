@@ -1,7 +1,10 @@
 export const languageOptions = [
   {
+    label: "JavaScript",
     value: "js",
-    label: "javascript",
+
+    // value: "js",
+    // label: "javascript",
   },
   {
     value: "c",

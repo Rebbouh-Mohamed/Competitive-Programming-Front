@@ -204,12 +204,12 @@ const handleCompile = () => {
           language={language?.value}
           theme={theme.value}
         />
-         <div style={{ marginTop: "auto", width: "100%" }}>
+         {/* <div style={{ marginTop: "auto", width: "100%" }}>
          <Push 
             func={() => handleCompile(code, language)} 
             value={outputDetails ? outputDetails: 0} 
           />
-          </div>
+          </div> */}
       </div>
     </div>
 
