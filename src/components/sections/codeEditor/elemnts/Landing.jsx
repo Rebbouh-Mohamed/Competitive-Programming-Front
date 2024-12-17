@@ -15,6 +15,7 @@ import { postDefaultCode } from "../../../../../redux/code/action";
 import { useDispatch } from "react-redux";
 import Push from "../../Push";
 import { testcode } from "../../../../../redux/test/action";
+import { useNavigate } from "react-router-dom";
 
 const Landing = ({ problem }) => {
   const dispatch = useDispatch();
@@ -45,7 +46,7 @@ const Landing = ({ problem }) => {
     dispatch(
       postDefaultCode({
         problemId: problem.id,
-        language: selectedLanguage.value,
+        language: selectedLanguage.lang,
       })
     )
       .unwrap()
@@ -78,54 +79,28 @@ const Landing = ({ problem }) => {
     }
   };
 
-  const handleCompile = () => {
+  const handleCompile = (code,language,is_test) => {
     setProcessing(true);
+    console.log("istest"+is_test);
     const formData = {
-      language: language.value,
+      language: language.lang,
       code: code,
     };
-    dispatch(testcode({ problem_id: problem.id, data: formData }))
+    dispatch(testcode({ problem_id: problem.id, data: formData,is_test}))
       .unwrap()
       .then((data) => {
-        setOutputDetails(data.percentage); // Set default code on success
+        setOutputDetails(data.percentage || outputDetails); // Set default code on success
       })
       .catch((err) => {
         console.log("Error fetching default code:", err);
       });
-  };
+      console.log("befor");
+    if (!is_test){window.location.reload();}
+    console.log("after")
 
-  const checkStatus = async (token) => {
-    const options = {
-      method: "GET",
-      url: process.env.REACT_APP_RAPID_API_URL + "/" + token,
-      params: { base64_encoded: "true", fields: "*" },
-      headers: {
-        "X-RapidAPI-Host": process.env.REACT_APP_RAPID_API_HOST,
-        "X-RapidAPI-Key": process.env.REACT_APP_RAPID_API_KEY,
-      },
-    };
-    try {
-      let response = await axios.request(options);
-      let statusId = response.data.status?.id;
-
-      if (statusId === 1 || statusId === 2) {
-        setTimeout(() => {
-          checkStatus(token);
-        }, 2000);
-        return;
-      } else {
-        setProcessing(false);
-        setOutputDetails(response.data);
-        showSuccessToast(`Compiled Successfully!`);
-        console.log("response.data", response.data);
-        return;
-      }
-    } catch (err) {
-      console.log("err", err);
-      setProcessing(false);
-      showErrorToast();
-    }
   };
+  
+
 
   function handleThemeChange(th) {
     const theme = th;
@@ -216,7 +191,7 @@ const Landing = ({ problem }) => {
       </div>
     </div>
       <Push
-        func={() => handleCompile(code, language)}
+        func={(is_test) => handleCompile(code, language,is_test)}
         value={outputDetails ? outputDetails : 0}
       />
         </div>

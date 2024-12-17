@@ -21,8 +21,8 @@ function Thebuttons({ func }) {
   };
 
   // Handler to run func and update state
-  const handleTestClick = useCallback(() => {
-    func();           // Run the provided function
+  const handleTestClick = useCallback((stat) => {
+    func(stat);           // Run the provided function
     setIsTested(false); // Update state to trigger re-render
   }, [func]);
 
@@ -34,7 +34,7 @@ function Thebuttons({ func }) {
         isfull={false}
         type="submit"
         isicon
-        onClick={handleTestClick} // Runs the handler
+        onClick={()=>handleTestClick(true)} // Runs the handler
       />
 
       <PrimaryButton
@@ -44,6 +44,8 @@ function Thebuttons({ func }) {
         isfull={false}
         isicon
         disabled={isTested} // Renders differently if tested
+        onClick={()=>handleTestClick(false)} // Runs the handler
+
       />
     </div>
   );
