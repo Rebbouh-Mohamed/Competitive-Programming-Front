@@ -14,9 +14,14 @@ import CustomInput from "./CustomInput";
 import OutputDetails from "./OutputDetails";
 import LanguagesDropdown from "./LanguagesDropdown";
 import "./CodeEditorWindow.css";
+import { postDefaultCode } from "../../../../../redux/code/action";
+import { useDispatch } from "react-redux";
+
+
 
 
 const Landing = ({problem}) => {
+  const dispatch=useDispatch()
   const [isScaled, setIsScaled] = useState(false);
   const defaultcode = `${problem.codejs}`;
   console.log(problem.codejs)
@@ -40,10 +45,19 @@ const Landing = ({problem}) => {
   const enterPress = useKeyPress("Enter");
   const ctrlPress = useKeyPress("Control");
 
-  const onSelectChange = (sl) => {
-    console.log("selected Option...", sl);
-    setLanguage(sl);
+  const onSelectChange = (selectedLanguage) => {
+    setLanguage(selectedLanguage);
+    dispatch(postDefaultCode({ problemId: problem.id, language: selectedLanguage.value }))
+      .unwrap()
+      .then((data) => {
+        setCode(data.code_snippet); // Set default code on success
+      })
+      .catch((err) => {
+        console.error("Error fetching default code:", err);
+        setCode(defaultcode); // Use fallback code if there's an error
+      });
   };
+
 
   useEffect(() => {
     if (enterPress && ctrlPress) {

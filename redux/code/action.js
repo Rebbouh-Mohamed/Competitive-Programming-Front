@@ -8,13 +8,13 @@ export const postDefaultCode = createAsyncThunk(
   async ({ problemId, language }, { rejectWithValue }) => {
     try {
       // Make the POST request to fetch the default code for the problem
-      const res = await api.get(`/codingspace/${problemId}/language/${language}`);
+      const res = await api.get(`/codingspace/${problemId}/${language}/`);
 
       // Check if the status is 200 (OK)
       if (res.status === 200) {
         return res.data; // Return the default code for the selected language
       } else {
-        return rejectWithValue("Failed to fetch default code");
+        return {code_snippet:""};
       }
     } catch (error) {
       // Handle errors

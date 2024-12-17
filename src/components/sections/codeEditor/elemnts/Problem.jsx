@@ -10,11 +10,13 @@ function Problem({
   constraints = "List the constraints for the problem.",
   exampleInput = "Provide an example input here.",
   exampleOutput = "Provide an example output here.",
+  codejs=""
 }) {
   if (problem) {
     goal = problem.description;
     input = problem.input_desc;
     output = problem.output_desc;
+    codejs=problem.codejs;
     //constraints = problem.constraints;
     //exampleInput = problem.exampleInput;
     //exampleOutput = problem.exampleOutput;
