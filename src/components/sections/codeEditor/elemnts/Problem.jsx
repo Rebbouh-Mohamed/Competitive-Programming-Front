@@ -11,7 +11,6 @@ function Problem({
   exampleInput = "Provide an example input here.",
   exampleOutput = "Provide an example output here.",
 }) {
-  console.log(problem);
   if (problem) {
     goal = problem.description;
     input = problem.input_desc;

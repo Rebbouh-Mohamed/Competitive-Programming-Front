@@ -5,7 +5,9 @@ import GameHUD from "../components/sections/GameHUD.jsx";
 import ProblemSection from "../components/sections/ProblemSection.jsx";
 import Push from "../components/sections/Push.jsx";
 import { getproblem } from "../../redux/problems/action.js";
- // Import the action to fetch problems
+import { getUpcomingContest } from "../../redux/contests/action"; // Action to get the contest data
+
+// Import the action to fetch problems
 
 const GameRoundStyle = {
   display: "flex",
@@ -17,35 +19,67 @@ const GameRoundStyle = {
 };
 
 const GRound = ({ Day = 0, Time }) => {
+  const dispatch = useDispatch();
+  const { upcomingContest } = useSelector((state) => state.contests);
+
+  // Fetch the upcoming contest if it's not already available in Redux
+  useEffect(() => {
+    if (!upcomingContest) {
+      dispatch(getUpcomingContest());
+    }
+  }, [dispatch, upcomingContest]);
+
+  useEffect(() => {
+    // Log the upcoming contest when it's available
+    if (upcomingContest) {
+      /* console.log(
+        upcomingContest
+          ? {
+              endTime: `${upcomingContest?.data?.contest?.end_time}`,
+              startTime: `${upcomingContest?.data?.contest?.start_time}`,
+            }
+          : ""
+      ); */
+    }
+  }, [upcomingContest]);
   const [showLanding, setShowLanding] = useState(true);
   const [selectedProblemId, setSelectedProblemId] = useState(null); // Track selected problem
-  const dispatch = useDispatch();
-  const [selectedProblem, setSelectedProblem] = useState(null)
+  const [selectedProblem, setSelectedProblem] = useState(null);
 
   // Access problems from Redux state
 
-   // Check if 'problems' is available in the state  
+  // Check if 'problems' is available in the state
   // Fetch problems when the component mounts
   useEffect(() => {
     dispatch(getproblem());
   }, [dispatch]);
-  const { problems = [], isLoading = false, error = null } = useSelector(
-    (state) => state.problems// Fallback to an empty object
+  const {
+    problems = [],
+    isLoading = false,
+    error = null,
+  } = useSelector(
+    (state) => state.problems // Fallback to an empty object
   );
-  
+
   const handleProblemClick = (problemId) => {
     setSelectedProblemId(problemId);
-    setSelectedProblem(problems.find((problem) => problem.id === problemId))
-    console.log(selectedProblem)
+    setSelectedProblem(problems.find((problem) => problem.id === problemId));
+    //console.log(selectedProblem);
     setShowLanding(false); // Switch to Landing component
   };
+
   return (
     <div style={GameRoundStyle}>
       <GameHUD
         onButtonClick={() => setShowLanding(true)} // Return to ProblemSection
         showLanding={showLanding} // Pass current state
         InfoHUD={selectedProblem ? selectedProblem : {}} // Ensure problems array is accessed safely
-        Time={Time}
+        Constent={upcomingContest ? upcomingContest : {}}
+        Title={upcomingContest ? upcomingContest.data.contest.title : ""}
+        Time={{
+          endTime: `${upcomingContest?.data?.contest?.end_time}`,
+          startTime: `${upcomingContest?.data?.contest?.start_time}`,
+        }}
       />
 
       {isLoading ? (

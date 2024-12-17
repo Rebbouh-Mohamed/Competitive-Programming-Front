@@ -4,8 +4,8 @@ import api from "./context/api"
 import { REFRESH_TOKEN, ACCESS_TOKEN } from "./context/constant";
 import { useState, useEffect } from "react";
 
-console.log(REFRESH_TOKEN)
-console.log(ACCESS_TOKEN)
+//console.log(REFRESH_TOKEN)
+//console.log(ACCESS_TOKEN)
 function ProtectedRoute({ children }) {
     const [isAuthorized, setIsAuthorized] = useState(null);
 

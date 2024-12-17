@@ -57,6 +57,7 @@ const LobbyHeader = React.memo(({ Contest }) => {
     if (Contest.status === "active") {
       // Dispatch the joinContest action when the contest is active
       dispatch(joinContest(Contest.contest.id));
+      navigate("/game-round")
     } else {
       // Handle inactive contest, you can show a message or alert here
       console.log("Contest is not active yet.");

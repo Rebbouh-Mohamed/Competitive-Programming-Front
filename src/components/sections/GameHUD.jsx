@@ -95,6 +95,7 @@ const styles = {
 const GameHUD = ({
   onButtonClick,
   showLanding,
+  Title,
   InfoHUD,
   Time = { startTime: "2024-12-12T20:42:07Z", endTime: "2025-02-15T22:10:09Z" },
 }) => {
@@ -113,7 +114,7 @@ const GameHUD = ({
   useEffect(() => {
     const startTime = Time.startTime;
     const endTime = Time.endTime;
-
+    //console.log(Time);
     const calculateTimeLeft = () => {
       const now = new Date();
       const endDate = new Date(endTime);
@@ -189,10 +190,12 @@ const GameHUD = ({
         </div>
       </div>
       <div style={styles.timeContainer}>
-        <p style={styles.text}>{`${timeLeft.minutes}:${timeLeft.seconds}`}</p>
+        <p
+          style={styles.text}
+        >{`${timeLeft.hours}:${timeLeft.minutes}:${timeLeft.seconds}`}</p>
       </div>
 
-      <p style={styles.dayText}>Day {InfoHUD[1]}</p>
+      <p style={styles.dayText}>{Title ? Title : 0}</p>
     </div>
   );
 };

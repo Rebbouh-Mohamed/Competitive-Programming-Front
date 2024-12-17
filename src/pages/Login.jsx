@@ -25,7 +25,7 @@ const Login = () => {
         loginUser({ username: localEmail, password: localPassword })
       ).unwrap();
 
-      console.log("Login action result:", result);
+      //console.log("Login action result:", result);
 
       if (!result) {
         console.error("Incomplete login response:", result);
