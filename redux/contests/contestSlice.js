@@ -23,12 +23,6 @@ const contestSlice = createSlice({
         state.upcomingContest = action.payload;
         state.error = null;
       })
-      .addCase(getUpcomingContest.rejected, (state, action) => {
-        console.error("Slice Rejected Action:", action);
-        state.isLoading = false;
-        state.upcomingContest = null;
-        state.error = action.payload || "Error fetching contest";
-      });
   }
 });
 

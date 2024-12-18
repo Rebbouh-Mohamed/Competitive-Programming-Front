@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import LobbyHeader from "../components/sections/LobbyHeader.jsx";
 import LobbyMain from "../components/sections/LobbyMain.jsx";
@@ -11,34 +11,43 @@ const Lobby = () => {
     (state) => state.contests
   );
 
-  const [Contest, setContest] = useState(null); // State for status
+  const [Contest, setContest] = useState(null); // State for contest data
 
-  // Create a debounced function using useMemo to avoid recreation on every render
-  const debouncedGetUpcomingContest = useMemo(
-    () =>
-      _.debounce(() => {
-        if (!isLoading && !upcomingContest) {
-          dispatch(getUpcomingContest());
-        }
-
-        if (upcomingContest) {
-          setContest(upcomingContest);
-        }
-      }, 300),
-    [dispatch, isLoading, upcomingContest]
-  );
+  // Debounced fetching function (optional)
+  const debouncedGetUpcomingContest = _.debounce(() => {
+    if (!isLoading && !upcomingContest) {
+      dispatch(getUpcomingContest());
+    }
+  }, 300);
 
   useEffect(() => {
-    // Trigger the debounced function
+    // Call debounced function to fetch contest data
     debouncedGetUpcomingContest();
+
+    // Set the contest data once fetched
+    if (upcomingContest) {
+      setContest(upcomingContest);
+    }
 
     // Cleanup debounce on unmount
     return () => debouncedGetUpcomingContest.cancel();
-  }, [debouncedGetUpcomingContest]);
+  }, [debouncedGetUpcomingContest, dispatch, upcomingContest, isLoading]);
+
+  // Error handling
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
     <>
-      <LobbyHeader Contest={Contest?.data} />
-      <LobbyMain Contest={Contest?.data}/>
+      {isLoading ? (
+        <div>Loading...</div> // Show loading indicator
+      ) : (
+        <>
+          <LobbyHeader Contest={Contest?.data} />
+          <LobbyMain Contest={Contest?.data} />
+        </>
+      )}
     </>
   );
 };
