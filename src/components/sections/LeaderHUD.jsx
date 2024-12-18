@@ -50,7 +50,7 @@ function LeaderHUD({infHUD = 0}) {
           lineHeight: "32px; ",
         }}
       >
-        Day {infHUD}
+        {infHUD}
       </p>
     </div>
   );

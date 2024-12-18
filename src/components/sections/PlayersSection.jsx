@@ -242,15 +242,15 @@ const PlayerList = ({ players, infHUD }) => {
     <div style={container}>
       {players.map((player, index) => (
         <PlayerCard
-          key={index}
-          rank={index + 1}
-          avatar={player.avatar}
-          username={player.username}
-          status={player.status}
-          score={player.score}
-          highlight={player.highlight}
-          infHUD={infHUD}
-        />
+        key={index}
+        rank={index + 1}
+        avatar={"https://via.placeholder.com/44x44"}
+        username={player?.user?.username || "Unknown"} // Safe access
+        status={index <= 20 ? "Qualified" : "Eliminated"} // Fix logic
+        score={player?.pionts || 0} // Default to 0 if points is undefined
+        highlight={false} // Fix typo
+        infHUD={infHUD}
+      />
       ))}
     </div>
   );

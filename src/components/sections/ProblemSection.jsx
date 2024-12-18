@@ -10,12 +10,9 @@ const ProblemCard = ({
   title = "Problem title",
   difficulty = "Difficulty",
   accuracy = -1,
+  subbmitted=false,
   onClick
 }) => {
-  let subbmitted = false;
-  if (accuracy !== -1) {
-    subbmitted = true;
-  }
 
   const [isHovered, setIsHovered] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
@@ -275,16 +272,17 @@ function ProgressBar({ Subbmition, TotalProblems, accuracy }) {
 }
 function ProblemSection({ problems, handleProblemClick }) {
   const CalcSubmission = () => {
-    return problems.filter((problem) => problem.accuracy).length;
+    return problems.filter((problem) => problem.submitted).length;
   };
   const CalcAccuracy = () => {
     const solvableProblems = problems.filter(
-      (problem) => problem.accuracy !== undefined
+      (problem) => problem.submitted 
     );
     const totalAccuracy = solvableProblems.reduce(
-      (sum, problem) => sum + problem.accuracy,
+      (sum, problem) => sum + problem.percentage,
       0
     );
+    console.log("total"+solvableProblems.length)
     return solvableProblems.length > 0 ? totalAccuracy / problems.length : 0; // Avoid division by zero
   };
   const styles = {
@@ -384,7 +382,8 @@ function ProblemSection({ problems, handleProblemClick }) {
             title={problem.title || `Problem ${index + 1}`}
             difficulty={problem.level || "Medium"}
             accuracy={problem.percentage || 0}
-            onClick={() => handleProblemClick(problem.id)} // Pass problem ID
+            subbmitted={problem.submitted}
+            onClick={(e) => !problem.submitted?handleProblemClick(problem.id):e.preventDefault()} // Pass problem ID
           />
         ))}
       </div>

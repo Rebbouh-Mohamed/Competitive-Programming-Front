@@ -59,7 +59,7 @@ let Time = {
   startTime: "2024-12-12T20:42:07Z",
   endTime: "2025-02-15T22:10:09Z",
 }
-let Day = 2;
+let Day = 1;
 const router = createBrowserRouter([
   {
     path: "/",
@@ -87,7 +87,7 @@ const router = createBrowserRouter([
         path: "leaderboard",
         element: (
           <ProtectedRoute>
-            <LBoard players={players} Day={Day} />
+            <LBoard/>
           </ProtectedRoute>
         ),
       },
