@@ -114,7 +114,7 @@ function Accuracy({ value }) {
     const timeoutId = setTimeout(() => {
       setFeedbackMessage(message);
       setFeedbackIcon(icon);
-    }, 3000); // 3-second delay
+    }, 10); // 3-second delay
 
     return () => clearTimeout(timeoutId); // Cleanup on unmount
   }, [value]);
