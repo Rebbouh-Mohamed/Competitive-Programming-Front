@@ -29,7 +29,7 @@ function Thebuttons({ func }) {
   return (
     <div style={ButtonsStyle}>
       <SecondaryButton
-        txt="Check accuracy"
+        txt="Test"
         to="game-round"
         isfull={false}
         type="submit"
@@ -38,7 +38,7 @@ function Thebuttons({ func }) {
       />
 
       <PrimaryButton
-        txt="Submit changes"
+        txt="Submit"
         to="game-round"
         isfull={false}
         type="submit"
