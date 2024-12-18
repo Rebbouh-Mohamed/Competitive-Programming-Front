@@ -29,7 +29,7 @@ function Thebuttons({ func }) {
   return (
     <div style={ButtonsStyle}>
       <SecondaryButton
-        txt="Test"
+        txt="Check accuracy"
         to="game-round"
         isfull={false}
         type="submit"
@@ -38,10 +38,10 @@ function Thebuttons({ func }) {
       />
 
       <PrimaryButton
-        txt="Submit"
+        txt="Submit changes"
         to="game-round"
-        type="submit"
         isfull={false}
+        type="submit"
         isicon
         disabled={isTested} // Renders differently if tested
         onClick={()=>handleTestClick(false)} // Runs the handler

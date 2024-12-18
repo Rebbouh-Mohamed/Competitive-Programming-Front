@@ -27,19 +27,19 @@ const Login = () => {
     if (isLoading) return;
     if (!localPassword && !localEmail) {
       passwordRef.current.focus();
-      setToastMessageyellow("Ops...you forget to fill the username and the password.");
+      setToastMessageyellow("Username and password are required to proceed.");
       setToaston(true); // Show toast
       return;
     }
     if (!localEmail) {
       emailRef.current.focus();
-      setToastMessageyellow("Ops...you forget to fill the username.");
+      setToastMessageyellow("Please enter your username to continue.");
       setToaston(true); // Show toast
       return;
     }
     if (!localPassword) {
       passwordRef.current.focus();
-      setToastMessageyellow("Ops...you forget to fill the password.");
+      setToastMessageyellow("Please enter your password to continue.");
       setToaston(true); // Show toast
       return;
     }

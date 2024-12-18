@@ -3,7 +3,7 @@ import Xicon from "../../../assets/icons/Xiconwhite.svg";
 import "./stylered.css"; // Make sure to import the CSS file
 
 const ToastRed = ({
-  message = "Wrong username or password try again.",
+  message = "Incorrect username or password.",
   onClose,
   position = { top: "50px", right: "50px" },
   speed = 0.05,
