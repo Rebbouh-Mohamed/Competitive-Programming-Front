@@ -17,9 +17,9 @@ function Problem({
     input = problem.input_desc;
     output = problem.output_desc;
     codejs=problem.codejs;
-    //constraints = problem.constraints;
-    //exampleInput = problem.exampleInput;
-    //exampleOutput = problem.exampleOutput;
+    constraints = problem.constraint;
+    exampleInput = problem.input_exp;
+    exampleOutput = problem.output_exp;
   }
   // Define styles as an object
   const styles = {
