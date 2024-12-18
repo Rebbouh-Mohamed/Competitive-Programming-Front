@@ -169,7 +169,7 @@ const PlayerCard = ({
   return (
     <div style={styles.container(highlight)}>
       <div style={styles.section}>
-        {infHUD == 2 && rank < 4 ? (
+        {infHUD.includes(2)&& rank < 4 ? (
           <div
             style={{
               display: "flex",
@@ -203,7 +203,7 @@ const PlayerCard = ({
           <img style={styles.avatar} src={avatar} alt="avatar" />
           <div style={styles.playerInfo}>
             <div style={styles.username}>{username}</div>
-            {infHUD == 2 && rank > 3 ? (
+            {infHUD.includes(2)&& rank > 3 ? (
               <div
                 style={{
                   alignSelf: "stretch",
@@ -217,7 +217,7 @@ const PlayerCard = ({
                 Nice try!
               </div>
             ) : (
-              <div style={styles.status}>{infHUD == 2 ? "Winner" : status}</div>
+              <div style={styles.status}>{infHUD.includes(2)? "Winner" : status}</div>
             )}
           </div>
         </div>
@@ -246,7 +246,7 @@ const PlayerList = ({ players, infHUD }) => {
         rank={index + 1}
         avatar={"https://via.placeholder.com/44x44"}
         username={player?.user?.username || "Unknown"} // Safe access
-        status={index <= 20 ? "Qualified" : "Eliminated"} // Fix logic
+        status={index+1 <= 11 ? "Qualified" : "Eliminated"} // Fix logic
         score={player?.pionts || 0} // Default to 0 if points is undefined
         highlight={false} // Fix typo
         infHUD={infHUD}

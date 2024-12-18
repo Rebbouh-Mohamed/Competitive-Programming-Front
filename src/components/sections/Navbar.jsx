@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import avatar from "../../assets/images/avatar.svg";
 import logo from "../../assets/images/logo.svg"
 import DangerButton from "../ui-elements/buttons/DangerButton";
+import { USERNAME } from "../../context/constant";
 const Navbar = () => {
   const container = {
     display: "flex",
@@ -61,7 +62,7 @@ const Navbar = () => {
               height: "1.5rem",
             }}
           />
-          <li style={usernamestyle}>Username</li>
+          <li style={usernamestyle}>{localStorage.getItem(USERNAME)}</li>
         </ul>
         <DangerButton txt="Logout" isLogout={true} />
       </ul>

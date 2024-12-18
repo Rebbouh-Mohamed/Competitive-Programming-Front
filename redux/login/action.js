@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../src/context/api"; // Import your axios instance
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../src/context/constant"; // Assuming these are the constants for your tokens
+import { ACCESS_TOKEN, REFRESH_TOKEN, USERNAME } from "../../src/context/constant"; // Assuming these are the constants for your tokens
 
 // Action for logging in
 export const loginUser = createAsyncThunk(
@@ -17,6 +17,9 @@ export const loginUser = createAsyncThunk(
         // Store the access and refresh tokens in localStorage
         localStorage.setItem(ACCESS_TOKEN, res.data.access);
         localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
+        localStorage.setItem(USERNAME, data.username);
+
+        
         return true;
       } else {
         return false;
