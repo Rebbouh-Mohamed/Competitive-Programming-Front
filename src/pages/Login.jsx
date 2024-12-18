@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux"; 
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import InputField from "../components/ui-elements/input/InputField";
 import PrimaryButton from "../components/ui-elements/buttons/PrimaryButton.jsx";
-import Biglogo from "../../public/images/Biglogo.jsx"
-import ToastRed from "../components/toasts/ToastRed.jsx"; 
-import { loginUser } from "../../redux/login/action"; 
+import Biglogo from "../../public/images/Biglogo.jsx";
+import ToastRed from "../components/toasts/red/ToastRed.jsx";
+import ToastYellow from "../components/toasts/yellow/ToastYellow.jsx";
+import { loginUser } from "../../redux/login/action";
 import styles from "./styles.json";
 
 const Login = () => {
@@ -14,9 +15,9 @@ const Login = () => {
   const { isLoading, error } = useSelector((state) => state.login);
   const [localEmail, setLocalEmail] = useState("");
   const [localPassword, setLocalPassword] = useState("");
-  const [toastMessage, setToastMessage] = useState("");
-
-  // Refs for the input fields
+  const [toastMessagered, setToastMessagered] = useState("");
+  const [toastMessageyellow, setToastMessageyellow] = useState("");
+  const [toastedon, setToaston] = useState(false); // Track if a toast is open
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
@@ -24,14 +25,22 @@ const Login = () => {
     if (e) e.preventDefault();
 
     if (isLoading) return;
-
-    // Check if any input is empty and focus on it
+    if (!localPassword && !localEmail) {
+      passwordRef.current.focus();
+      setToastMessageyellow("Ops...you forget to fill the username and the password.");
+      setToaston(true); // Show toast
+      return;
+    }
     if (!localEmail) {
       emailRef.current.focus();
+      setToastMessageyellow("Ops...you forget to fill the username.");
+      setToaston(true); // Show toast
       return;
     }
     if (!localPassword) {
       passwordRef.current.focus();
+      setToastMessageyellow("Ops...you forget to fill the password.");
+      setToaston(true); // Show toast
       return;
     }
 
@@ -41,22 +50,32 @@ const Login = () => {
       ).unwrap();
 
       if (!result) {
-        console.error("Incomplete login response:", result);
-        setToastMessage("Login failed. Please try again.");
+        setToastMessagered("Login failed. Please try again.");
+        setToaston(true); // Show error toast
         return;
       }
 
       navigate("/lobby");
     } catch (err) {
-      console.error("Error during login process:", err);
-      setToastMessage(err.message);
+      setToastMessagered(err.message);
+      setToaston(true); // Show error toast
+    }
+  };
+
+  // Close toast when the user types in the input field
+  const handleInputChange = () => {
+    if (toastedon) {
+      setToastMessagered("");
+      setToastMessageyellow("");
+      console.log("handleInputChange")
+      setToaston(false); // Close the toast
     }
   };
 
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Enter") {
-        handleSubmit(); 
+        handleSubmit();
       }
     };
 
@@ -77,15 +96,21 @@ const Login = () => {
         <InputField
           placeholder="Enter username"
           value={localEmail}
-          ref={emailRef} // Attach ref to the input field
-          onChange={(value) => setLocalEmail(value)}
+          ref={emailRef}
+          onChange={(value) => {
+            setLocalEmail(value);
+            handleInputChange(); // Close toast on input change
+          }}
         />
         <InputField
           placeholder="Enter password"
           value={localPassword}
           isPassword
-          ref={passwordRef} // Attach ref to the input field
-          onChange={(value) => setLocalPassword(value)}
+          ref={passwordRef}
+          onChange={(value) => {
+            setLocalPassword(value);
+            handleInputChange(); // Close toast on input change
+          }}
         />
         {error && <p style={styles.errorMessage}>{error}</p>}
         {isLoading ? (
@@ -104,7 +129,16 @@ const Login = () => {
         <div style={styles.caption}>{Caption}</div>
       </div>
 
-      <ToastRed message={toastMessage} onClose={() => setToastMessage("")} />
+      <ToastRed
+        message={toastMessagered}
+        onClose={() => setToastMessagered("")}
+        monitorInputChange={handleInputChange} // Pass the function to ToastRed
+      />
+      <ToastYellow
+        message={toastMessageyellow}
+        onClose={() => setToastMessageyellow("")}
+        monitorInputChange={handleInputChange} // Pass the function to ToastYellow
+      />
     </div>
   );
 };
