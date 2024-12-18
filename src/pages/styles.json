@@ -13,7 +13,8 @@
     "fontSize": "2rem",
     "fontStyle": "normal",
     "fontWeight": "700",
-    "lineHeight": "2.5rem"
+    "lineHeight": "2.5rem",
+    "userSelect": "none"
   },
   "form": {
     "display": "flex",

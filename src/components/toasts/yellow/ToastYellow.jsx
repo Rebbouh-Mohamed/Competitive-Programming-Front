@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import Xicon from "../../assets/icons/Xicon.svg";
-import "./stylegreen.css"; // Make sure to import the CSS file
+import Xicon from "../../../assets/icons/Xiconblack.svg";
+import "./styleyellow.css"; // Make sure to import the CSS file
 
-const ToastGreen = ({
+const ToastYellow = ({
   message = "Game is about to begin! Get ready to dive in!",
   onClose,
   position = { top: "50px", right: "50px" },
-  speed = 0.1,
+  speed = 0.05,
+  monitorInputChange
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [positionOffset, setPositionOffset] = useState(100); // Start off-screen
@@ -56,12 +57,16 @@ const ToastGreen = ({
       });
     }, 16);
   };
-
+  useEffect(() => {
+    if (monitorInputChange && isVisible) {
+      handleClose(); // Close the toast when monitorInputChange is triggered
+    }
+  }, [monitorInputChange]); // Depend on monitorInputChange prop
   if (!isVisible) return null; // Only show the toast if it is visible
 
   return (
     <div
-      className="toast-container"
+      className="yellow-toast-container"
       onClick={handleClose} // Trigger slide-out on click
       style={{
         top: position.top,
@@ -72,17 +77,17 @@ const ToastGreen = ({
         transition: `transform ${speed}s ease-out`, // Smooth sliding animation
       }}
     >
-      <div className="header">
-        <div className="header-text">Success</div>
-        <div className="icon-container">
-          <img src={Xicon} className="close-icon" alt="Close icon" />
+      <div className="yellow-header">
+        <div className="yellow-header-text">Warning</div>
+        <div className="yellow-icon-container">
+          <img src={Xicon} className="yellow-close-icon" alt="Close icon" />
         </div>
       </div>
-      <div className="message-container">
-        <div className="message-text">{message}</div>
+      <div className="yellow-message-container">
+        <div className="yellow-message-text">{message}</div>
       </div>
     </div>
   );
 };
 
-export default ToastGreen;
+export default ToastYellow;

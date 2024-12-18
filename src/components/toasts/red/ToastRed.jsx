@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import Xicon from "../../assets/icons/Xicon.svg";
+import Xicon from "../../../assets/icons/Xiconwhite.svg";
 import "./stylered.css"; // Make sure to import the CSS file
 
 const ToastRed = ({
   message = "Wrong username or password try again.",
   onClose,
   position = { top: "50px", right: "50px" },
-  speed = 0.1,
+  speed = 0.05,
+  monitorInputChange,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [positionOffset, setPositionOffset] = useState(100); // Start off-screen
-
   useEffect(() => {
     if (message) {
       setIsVisible(true); // Show the toast
@@ -56,12 +56,17 @@ const ToastRed = ({
       });
     }, 16);
   };
+  useEffect(() => {
+    if (monitorInputChange && isVisible) {
+      handleClose(); // Close the toast when monitorInputChange is triggered
+    }
+  }, [monitorInputChange]); // Depend on monitorInputChange prop
 
   if (!isVisible) return null; // Only show the toast if it is visible
 
   return (
     <div
-      className="toast-container"
+      className="red-toast-container"
       onClick={handleClose} // Trigger slide-out on click
       style={{
         top: position.top,
@@ -72,14 +77,14 @@ const ToastRed = ({
         transition: `transform ${speed}s ease-out`, // Smooth sliding animation
       }}
     >
-      <div className="header">
-        <div className="header-text">Error</div>
-        <div className="icon-container">
-          <img src={Xicon} className="close-icon" alt="Close icon" />
+      <div className="red-header">
+        <div className="red-header-text">Error</div>
+        <div className="red-icon-container">
+          <img src={Xicon} className="red-close-icon" alt="Close icon" />
         </div>
       </div>
-      <div className="message-container">
-        <div className="message-text">{message}</div>
+      <div className="red-message-container">
+        <div className="red-message-text">{message}</div>
       </div>
     </div>
   );

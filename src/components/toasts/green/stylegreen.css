@@ -1,5 +1,5 @@
 /* Base styles for the toast container */
-.toast-container {
+.green-toast-container {
   position: fixed;
   background: #3be254;
   border-radius: 16px;
@@ -13,23 +13,23 @@
 }
 
 /* Hover styles */
-.toast-container:hover {
+.green-toast-container:hover {
   background: #00ff26; /* Change background color on hover */
   transition: background 0.3s ease-in-out !important; /* Smooth background transition */
 }
 
 /* Class when the toast is visible (sliding in) */
-.toast-container.show {
+.green-toast-container.show {
   transform: translateX(0); /* Slide in to the original position */
 }
 
 /* Class when the toast is hidden (sliding out) */
-.toast-container.hide {
+.green-toast-container.hide {
   transform: translateX(100%); /* Slide out to the right */
 }
 
 /* Header styles */
-.header {
+.green-header {
   display: flex;
   padding: 16px;
   align-items: center;
@@ -38,7 +38,7 @@
 }
 
 /* Header text styles */
-.header-text {
+.green-header-text {
   color: #fff;
   flex: 1;
   font-family: Inter, sans-serif;
@@ -48,7 +48,7 @@
 }
 
 /* Icon container styles */
-.icon-container {
+.green-icon-container {
   display: flex;
   padding: 4px;
   justify-content: center;
@@ -56,13 +56,13 @@
 }
 
 /* Close icon styles */
-.close-icon {
+.green-close-icon {
   width: 24px;
   height: 24px;
 }
 
 /* Message container styles */
-.message-container {
+.green-message-container {
   display: flex;
   padding: 1.5rem 2rem;
   justify-content: center;
@@ -71,7 +71,7 @@
 }
 
 /* Message text styles */
-.message-text {
+.green-message-text {
   color: #fff;
   font-family: Inter, sans-serif;
   font-size: 16px;

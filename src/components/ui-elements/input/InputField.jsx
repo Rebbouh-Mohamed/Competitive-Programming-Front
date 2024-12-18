@@ -1,4 +1,4 @@
-import React, { useState , forwardRef} from "react";
+import React, { useState, forwardRef } from "react";
 import showedeye from "../../../assets/icons/eye/showedeye.svg";
 import hiddeneye from "../../../assets/icons/eye/hiddeneye.svg";
 
@@ -47,19 +47,15 @@ const styles = {
 const Inputbar = forwardRef(({ placeholder, isPassword, value, onChange, showAsEntered }, ref) => {
   const [showPassword, setShowPassword] = useState(false);
   const [inputValue, setInputValue] = useState(value || "");
-  const [fullInputValue, setFullInputValue] = useState("");
+  const [fullInputValue, setFullInputValue] = useState(value || "");
   const [isFocused, setIsFocused] = useState(false);
 
   const handleChange = (e) => {
     if (!e.target) return;
-    const input = e.target.value;
-    const newValue =
-      input.length < fullInputValue.length
-        ? input
-        : fullInputValue + input.slice(fullInputValue.length);
+    const { value: input, selectionStart } = e.target;
+    setFullInputValue(input);
     setInputValue(input);
-    setFullInputValue(newValue);
-    onChange(newValue);
+    onChange(input);
   };
 
   const handleFocus = () => {
@@ -77,9 +73,67 @@ const Inputbar = forwardRef(({ placeholder, isPassword, value, onChange, showAsE
     if (showPassword && showAsEntered) {
       return fullInputValue;
     } else if (!showPassword) {
-      return "•".repeat(fullInputValue.length);
+      return "\u2022".repeat(fullInputValue.length);
     }
     return fullInputValue;
+  };
+
+  const handleKeyDown = (e) => {
+    if (isPassword && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      // Prevent default typing behavior if password field
+      e.preventDefault();
+
+      const { selectionStart, selectionEnd } = e.target;
+      const newChar = e.key;
+      const newValue =
+        fullInputValue.slice(0, selectionStart) +
+        newChar +
+        fullInputValue.slice(selectionEnd);
+
+      setFullInputValue(newValue);
+      onChange(newValue);
+
+      // Update cursor position manually
+      setTimeout(() => {
+        e.target.setSelectionRange(selectionStart + 1, selectionStart + 1);
+      });
+    } else if (e.key === "Backspace" || e.key === "Delete") {
+      e.preventDefault();
+
+      const { selectionStart, selectionEnd } = e.target;
+      let newValue;
+      if (selectionStart === selectionEnd) {
+        // Single cursor
+        if (e.key === "Backspace" && selectionStart > 0) {
+          newValue =
+            fullInputValue.slice(0, selectionStart - 1) +
+            fullInputValue.slice(selectionEnd);
+          setTimeout(() => {
+            e.target.setSelectionRange(selectionStart - 1, selectionStart - 1);
+          });
+        } else if (e.key === "Delete" && selectionStart < fullInputValue.length) {
+          newValue =
+            fullInputValue.slice(0, selectionStart) +
+            fullInputValue.slice(selectionEnd + 1);
+          setTimeout(() => {
+            e.target.setSelectionRange(selectionStart, selectionStart);
+          });
+        } else {
+          newValue = fullInputValue;
+        }
+      } else {
+        // Range delete
+        newValue =
+          fullInputValue.slice(0, selectionStart) +
+          fullInputValue.slice(selectionEnd);
+        setTimeout(() => {
+          e.target.setSelectionRange(selectionStart, selectionStart);
+        });
+      }
+
+      setFullInputValue(newValue);
+      onChange(newValue);
+    }
   };
 
   return (
@@ -105,6 +159,7 @@ const Inputbar = forwardRef(({ placeholder, isPassword, value, onChange, showAsE
         onFocus={handleFocus}
         style={styles.input(isFocused)}
         onBlur={handleBlur}
+        onKeyDown={handleKeyDown}
       />
       {isPassword && (
         <button
@@ -128,6 +183,7 @@ const Inputbar = forwardRef(({ placeholder, isPassword, value, onChange, showAsE
     </>
   );
 });
+
 const InputField = forwardRef(({ placeholder, isPassword, value, onChange, showAsEntered }, ref) => (
   <div style={styles.container}>
     <Inputbar
@@ -140,6 +196,5 @@ const InputField = forwardRef(({ placeholder, isPassword, value, onChange, showA
     />
   </div>
 ));
-
 
 export default InputField;
