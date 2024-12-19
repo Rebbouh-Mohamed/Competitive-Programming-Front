@@ -25,36 +25,7 @@ const authStore = createStore({
   cookieDomain: window.location.hostname,
   cookieSecure: window.location.protocol === "https:",
 });
-let players = [
-  {
-    avatar: "https://via.placeholder.com/44x44",
-    username: "louai",
-    status: "Qualified",
-    score: "10",
-    highlight: false,
-  },
-  {
-    avatar: "https://via.placeholder.com/44x44",
-    username: "You",
-    status: "Qualified",
-    score: "40",
-    highlight: true,
-  },
-  {
-    avatar: "https://via.placeholder.com/44x44",
-    username: "sami",
-    status: "Qualified",
-    score: "80",
-    highlight: false,
-  },
-  {},
-];
-const problems = [
-  { title: "Two Sum", accuracy: 80, difficulty: "Easy" },
-  { title: "Binary Search", accuracy: 70, difficulty: "Medium" },
-  { title: "Palindrome Number", accuracy: 50, difficulty: "Easy" },
-  { title: "Merge Sort", accuracy: 90, difficulty: "Hard" },
-];
+
 let Time = {
   startTime: "2024-12-12T20:42:07Z",
   endTime: "2025-02-15T22:10:09Z",

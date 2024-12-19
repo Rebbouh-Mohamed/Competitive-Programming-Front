@@ -1,5 +1,7 @@
 
 import React, { useState, useEffect } from "react";
+import api from "../../context/api"
+import { USERNAME } from "../../context/constant";
 
 function sliceArray(arr, size = 12) {
   const result = [];
@@ -19,7 +21,7 @@ function sliceArray(arr, size = 12) {
 
   return result;
 }
-import players from "../../data/players.json";
+
 import rules from "../../data/rules.json";
 
 // LobbyMain.jsx
@@ -125,7 +127,6 @@ const Pagination = ({ page, onPrevClick, onNextClick, totalPages }) => {
     </div>
   );
 };
-import { getContestParticipants } from "../../../redux/participants/action.js";
 const LobbyMain = () => {
   const styles = {
     container: {
@@ -270,7 +271,8 @@ const LobbyMain = () => {
     }),
   };
   const [page, setPage] = useState(1);
-  const [playersChunks, setPlayersChunks] = useState(() => sliceArray(players));
+  const [playersChunks, setPlayersChunks] = useState([]);
+  const [players, setPlayers] = useState([]); // Store fetched players here
 
   const totalPages = playersChunks.length;
 
@@ -282,16 +284,26 @@ const LobbyMain = () => {
     setPage((prev) => Math.min(prev + 1, totalPages));
   };
 
-  // Use a separate useEffect to update playersChunks when the page changes
+  // Fetch players data from API
   useEffect(() => {
-    const chunks = sliceArray(players);
-    setPlayersChunks(chunks);
-  }, []); // This runs only once on initial render
+    const fetchPlayers = async () => {
+      try {
+        const response = await api.get("/contests/participants/"); // Replace with actual API endpoint
+        setPlayers(response.data);
+        setPlayersChunks(sliceArray(response.data)); // Slice players into chunks for pagination
+      } catch (error) {
+        console.error("Error fetching players:", error);
+      }
+    };
 
-  // Another useEffect to handle page-specific updates
+    fetchPlayers();
+  }, []); // Runs once on component mount
+
+  // Update player chunks whenever the page changes
   useEffect(() => {
-    console.log("Current page:", page);
-  }, [page]);
+    setPlayersChunks(sliceArray(players));
+  }, [players, page]);
+
   return (
     <div style={styles.container}>
       {/* Game Rules Section */}
@@ -329,16 +341,16 @@ const LobbyMain = () => {
           {playersChunks[page - 1]?.map((player, index) => (
             <div
               key={index}
-              style={styles.playerCardIsCurrentMultip(player.isCurrent)}
+              style={styles.playerCardIsCurrentMultip(player.username ==localStorage.getItem(USERNAME))}
             >
               <img
-                src={player.avatar}
+                src={"https://via.placeholder.com/96x96"}
                 alt={player.username}
                 style={styles.playerAvatar}
               />
               <div style={styles.playerUsername}>{player.username}</div>
-              <div style={styles.playerStatus(player.isReady)}>
-                {player.isReady ? "Ready" : player.status}
+              <div style={styles.playerStatus(player.username ==localStorage.getItem(USERNAME))}>
+                {player.username ==localStorage.getItem(USERNAME)  ? "Ready" : "Joining..."}
               </div>
             </div>
           ))}

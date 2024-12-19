@@ -4,7 +4,8 @@ import createStore from "react-auth-kit/createStore";
 import problemSlice from "./problems/problemSlice"
 import testSlice from "./test/testSlice"
 import { Percent } from "@mui/icons-material";
-import contestS from "./contests/contestSlice"
+import contestS from "./contests/contestSlice";
+
 // React Auth Kit store setup
 const authStore = createStore({
   authName: "_auth", // Name of the cookie for storing authentication data
@@ -99,7 +100,7 @@ const store = configureStore({
     login: loginSlice.reducer,
     contests: contestS, 
     problems:problemSlice,// Add contests slice here
-    percentage:testSlice,
+    percentage:testSlice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
