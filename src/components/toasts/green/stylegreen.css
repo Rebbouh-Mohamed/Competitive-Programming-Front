@@ -1,0 +1,80 @@
+/* Base styles for the toast container */
+.green-toast-container {
+  position: fixed;
+  background: #3be254;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  z-index: 9999;
+  align-items: flex-start;
+  transform: translateX(100%); /* Initially off-screen to the right */
+  cursor: pointer;
+  
+}
+
+/* Hover styles */
+.green-toast-container:hover {
+  background: #00ff26; /* Change background color on hover */
+  transition: background 0.3s ease-in-out !important; /* Smooth background transition */
+}
+
+/* Class when the toast is visible (sliding in) */
+.green-toast-container.show {
+  transform: translateX(0); /* Slide in to the original position */
+}
+
+/* Class when the toast is hidden (sliding out) */
+.green-toast-container.hide {
+  transform: translateX(100%); /* Slide out to the right */
+}
+
+/* Header styles */
+.green-header {
+  display: flex;
+  padding: 16px;
+  align-items: center;
+  align-self: stretch;
+  border-bottom: 1px solid #fff;
+}
+
+/* Header text styles */
+.green-header-text {
+  color: #fff;
+  flex: 1;
+  font-family: Inter, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+/* Icon container styles */
+.green-icon-container {
+  display: flex;
+  padding: 4px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Close icon styles */
+.green-close-icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* Message container styles */
+.green-message-container {
+  display: flex;
+  padding: 1.5rem 2rem;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+}
+
+/* Message text styles */
+.green-message-text {
+  color: #fff;
+  font-family: Inter, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}

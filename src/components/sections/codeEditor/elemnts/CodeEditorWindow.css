@@ -1,0 +1,15 @@
+.scroll-decoration {
+  display: none;
+}
+
+* {
+  transform: none;
+  translate: none;
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -o-transition: none !important;
+  transition: none !important;
+  -ms-transform-origin-y: none !important;
+  -moz-animation: none !important;
+  animation: none !important;
+}

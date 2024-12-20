@@ -1,0 +1,9 @@
+/* Container styles for the pressed state */
+.dropdown-container.pressed .custom-select__control {
+  background-color: rgba(255, 255, 255, 0.24); /* Red background when the control is pressed */
+}
+
+/* Default styles for the control */
+.custom-select__control {
+  transition: background-color 0.2s ease;
+}
