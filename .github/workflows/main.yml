@@ -1,0 +1,22 @@
+name: Run Shell Script
+
+on:
+  push:  # Run on pushes to the repository
+    branches:
+      - main
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set Up Environment
+      run: sudo apt-get update && sudo apt-get install -y curl
+
+    - name: Run Shell Script
+      run: |
+        chmod +x ./script.sh  # Ensure the script is executable
+        ./script.sh          # Run the script
