@@ -44,8 +44,8 @@ const Lobby = () => {
         <div>Loading...</div> // Show loading indicator
       ) : (
         <>
-          <LobbyHeader Contest={Contest?.data} />
-          <LobbyMain Contest={Contest?.data} />
+          <LobbyHeader Contest={Contest} />
+          <LobbyMain Contest={Contest} />
         </>
       )}
     </>

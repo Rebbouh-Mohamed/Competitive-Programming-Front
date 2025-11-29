@@ -192,7 +192,7 @@ const GameHUD = ({
       <div style={styles.timeContainer}>
         <p
           style={styles.text}
-        >{`${timeLeft.hours}:${timeLeft.minutes}:${timeLeft.seconds}`}</p>
+        >{`${timeLeft.hours.toString().padStart(2, '0')}:${timeLeft.minutes.toString().padStart(2, '0')}:${timeLeft.seconds.toString().padStart(2, '0')}`}</p>
       </div>
 
       <p style={styles.dayText}>{Title ? Title : 0}</p>

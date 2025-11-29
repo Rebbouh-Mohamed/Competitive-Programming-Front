@@ -16,41 +16,35 @@ const LobbyHeader = React.memo(({ Contest }) => {
     if (Contest?.contest?.start_time) {
       const startTime = new Date(Contest.contest.start_time).getTime();
 
-      // Define the throttled function
-      const throttledCalculateTimeLeft = _.throttle(() => {
+      const calculateTimeLeft = () => {
         const currentTime = new Date().getTime();
         const difference = startTime - currentTime;
 
         if (difference > 0) {
           const minutes = Math.floor((difference / (1000 * 60)) % 60);
           const seconds = Math.floor((difference / 1000) % 60);
+          const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+          const days = Math.floor(difference / (1000 * 60 * 60 * 24));
 
-          setTimeLeft(
-            `${minutes.toString().padStart(2, "0")}:${seconds
-              .toString()
-              .padStart(2, "0")}`
-          );
-          setIsTimeUp(false); // Reset time up state while countdown
+          let timeString = "";
+          if (days > 0) timeString += `${days}d `;
+          if (hours > 0) timeString += `${hours}h `;
+          timeString += `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+
+          setTimeLeft(timeString);
+          setIsTimeUp(false);
         } else {
-          setTimeLeft("00:00"); // Contest has started
-          setIsTimeUp(true); // Set time up state to true
+          setTimeLeft("00:00");
+          setIsTimeUp(true);
         }
-      }, 1000); // Throttle execution to once every second
-
-      // Call the throttled function initially
-      throttledCalculateTimeLeft();
-
-      // Set an interval to regularly call the throttled function
-      const timer = setInterval(() => throttledCalculateTimeLeft(), 1000);
-      setTitle(Contest.contest.title);
-
-      // Cleanup: Clear interval and cancel any throttled calls on unmount
-      return () => {
-        clearInterval(timer);
-        throttledCalculateTimeLeft.cancel(); // Cancel pending throttled calls
       };
+
+      calculateTimeLeft();
+      const timer = setInterval(calculateTimeLeft, 1000);
+
+      return () => clearInterval(timer);
     }
-  }, [Contest?.contest?.start_time, Contest?.contest?.id]);
+  }, [Contest?.contest?.start_time]);
 
   // Function to handle the button click for joining the contest
   const handleJoinContest = () => {
@@ -123,8 +117,8 @@ const LobbyHeader = React.memo(({ Contest }) => {
               ? Contest.status === "none"
                 ? "There is No game contest right now"
                 : Contest.status === "upcoming"
-                ? `Game starts in: ${timeLeft}`
-                : ""
+                  ? `Game starts in: ${timeLeft}`
+                  : ""
               : ""
             : ""}
         </div>

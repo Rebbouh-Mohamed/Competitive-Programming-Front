@@ -6,12 +6,12 @@ export const getUpcomingContest = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get("/contests/upcontest/");
-      return response;
+      return response.data.data;
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message ||
-          error.message ||
-          "An unexpected error occurred"
+        error.message ||
+        "An unexpected error occurred"
       );
     }
   }

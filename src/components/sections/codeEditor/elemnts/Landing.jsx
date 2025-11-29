@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 const Landing = ({ problem }) => {
   const dispatch = useDispatch();
   const [isScaled, setIsScaled] = useState(false);
-  const defaultcode = `${problem.codejs}`;
+  const defaultcode = problem.codejs || "";
   const toggleScale = () => {
     setIsScaled((prev) => !prev);
   };
@@ -79,14 +79,14 @@ const Landing = ({ problem }) => {
     }
   };
 
-  const handleCompile = (code,language,is_test) => {
+  const handleCompile = (code, language, is_test) => {
     setProcessing(true);
-    console.log("istest"+is_test);
+    console.log("istest" + is_test);
     const formData = {
       language: language.lang,
       code: code,
     };
-    dispatch(testcode({ problem_id: problem.id, data: formData,is_test}))
+    dispatch(testcode({ problem_id: problem.id, data: formData, is_test }))
       .unwrap()
       .then((data) => {
         setOutputDetails(data.percentage || 0); // Set default code on success
@@ -94,12 +94,12 @@ const Landing = ({ problem }) => {
       .catch((err) => {
         console.log("Error fetching default code:", err);
       });
-      console.log("befor");
-    if (!is_test){window.location.reload();}
+    console.log("befor");
+    // if (!is_test) { window.location.reload(); }
     console.log("after")
 
   };
-  
+
 
 
   function handleThemeChange(th) {
@@ -150,51 +150,110 @@ const Landing = ({ problem }) => {
       justifyContent: "space-between",
       alignItems: "center",
     }}>
-    
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "24px",
-        padding: "32px 0",
-        height: "612px",
-        flex: "1 0 0",
-        width: "1440px",
-        alignSelf: "stretch",
-        justifyContent: "space-between",
-      }}
-      >
-      <Problem isScaled={isScaled} problem={problem} />
+
       <div
         style={{
           display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-start",
-          borderRadius: "16px",
-          background: "var(--White-12, rgba(255, 255, 255, 0.12))",
+          alignItems: "center",
+          gap: "24px",
+          padding: "32px 0",
+          height: "612px",
+          flex: "1 0 0",
+          width: "1440px",
+          alignSelf: "stretch",
+          justifyContent: "space-between",
         }}
       >
-        <LanguagesDropdown
-          isScaled={isScaled}
-          onScale={toggleScale}
-          toggleRefresh={toggleRefresh}
-          onSelectChange={onSelectChange}
+        <Problem isScaled={isScaled} problem={problem} />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            borderRadius: "16px",
+            background: "var(--White-12, rgba(255, 255, 255, 0.12))",
+          }}
+        >
+          <LanguagesDropdown
+            isScaled={isScaled}
+            onScale={toggleScale}
+            toggleRefresh={toggleRefresh}
+            onSelectChange={onSelectChange}
           />
-        <CodeEditorWindow
-          isScaled={isScaled}
-          code={code}
-          onChange={onChange}
-          language={language?.value}
-          theme={theme.value}
+          <CodeEditorWindow
+            isScaled={isScaled}
+            code={code}
+            onChange={onChange}
+            language={language?.value}
+            theme={theme.value}
           />
-        <div style={{ marginTop: "auto", width: "100%" }}></div>
+          <div style={{ marginTop: "auto", width: "100%" }}></div>
+        </div>
       </div>
-    </div>
       <Push
-        func={(is_test) => handleCompile(code, language,is_test)}
+        func={(is_test) => handleCompile(code, language, is_test)}
         value={outputDetails ? outputDetails : 0}
       />
+      {outputDetails !== null && (
+        <div
+          style={{
+            position: "fixed",
+            top: "0",
+            left: "0",
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000,
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "#1e1e1e",
+              padding: "2rem",
+              borderRadius: "8px",
+              textAlign: "center",
+              color: "white",
+              maxWidth: "400px",
+              width: "100%",
+            }}
+          >
+            {outputDetails === 100 ? (
+              <>
+                <h2 style={{ color: "#4caf50", marginBottom: "1rem" }}>
+                  Success!
+                </h2>
+                <p>You got everything right!</p>
+              </>
+            ) : (
+              <>
+                <h2 style={{ color: "#f44336", marginBottom: "1rem" }}>
+                  Keep Trying
+                </h2>
+                <p>Your score: {outputDetails}%</p>
+                <p>Check your logic and try again.</p>
+              </>
+            )}
+            <button
+              onClick={() => setOutputDetails(null)}
+              style={{
+                marginTop: "1.5rem",
+                padding: "0.5rem 1rem",
+                backgroundColor: "#2196f3",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+              }}
+            >
+              Close
+            </button>
+          </div>
         </div>
+      )}
+    </div>
   );
 };
 

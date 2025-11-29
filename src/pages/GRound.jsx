@@ -75,10 +75,10 @@ const GRound = ({ Day = 0, Time }) => {
         showLanding={showLanding} // Pass current state
         InfoHUD={selectedProblem ? selectedProblem : {}} // Ensure problems array is accessed safely
         Constent={upcomingContest ? upcomingContest : {}}
-        Title={upcomingContest ? upcomingContest.data.contest.title : ""}
+        Title={upcomingContest ? upcomingContest.contest.title : ""}
         Time={{
-          endTime: `${upcomingContest?.data?.contest?.end_time}`,
-          startTime: `${upcomingContest?.data?.contest?.start_time}`,
+          endTime: `${upcomingContest?.contest?.end_time}`,
+          startTime: `${upcomingContest?.contest?.start_time}`,
         }}
       />
 
@@ -89,14 +89,14 @@ const GRound = ({ Day = 0, Time }) => {
       ) : (
         <>
           {!showLanding ? (
-            <Landing problem={selectedProblem}/> // Pass selected problem safely
+            <Landing problem={selectedProblem} /> // Pass selected problem safely
           ) : (
             <ProblemSection
               problems={problems}
               handleProblemClick={handleProblemClick} // Handle problem click
             />
           )}
-          
+
         </>
       )}
     </div>
