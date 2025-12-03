@@ -89,14 +89,20 @@ const Landing = ({ problem }) => {
     dispatch(testcode({ problem_id: problem.id, data: formData, is_test }))
       .unwrap()
       .then((data) => {
-        setOutputDetails(data.percentage || 0); // Set default code on success
+        console.log(data)
+        if(data.all_passed){
+          // showSuccessToast();
+          setOutputDetails(100);
+        }
+        else{
+          
+        }
+        //setOutputDetails(data.percentage || 0); // Set default code on success
       })
       .catch((err) => {
         console.log("Error fetching default code:", err);
       });
-    console.log("befor");
     // if (!is_test) { window.location.reload(); }
-    console.log("after")
 
   };
 
@@ -122,7 +128,7 @@ const Landing = ({ problem }) => {
   const showSuccessToast = (msg) => {
     toast.success(msg || `Compiled Successfully!`, {
       position: "top-right",
-      autoClose: 1000,
+      autoClose: 300,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,

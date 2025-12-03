@@ -1,24 +1,33 @@
-// actions.js or action file
+// actions.js
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../src/context/api"; // Your axios instance
 
-// Action for posting default code based on problem ID and selected language
+/**
+ * Fetch the default/template code for a problem using the new endpoint
+ * POST /codingspace/generate-template/
+ * Body: { problem_id: number, language: string }
+ * Response: { template: string, language: string }
+ */
 export const postDefaultCode = createAsyncThunk(
-  "codingspace/postDefaultCode", // Action type
+  "codingspace/fetchDefaultCode",
   async ({ problemId, language }, { rejectWithValue }) => {
     try {
-      // Make the POST request to fetch the default code for the problem
-      const res = await api.get(`/codingspace/${problemId}/${language}/`);
+      const response = await api.post("/codingspace/generate-template/", {
+        problem_id: problemId,
+        language: language,
+      });
 
-      // Check if the status is 200 (OK)
-      if (res.status === 200) {
-        return res.data; // Return the default code for the selected language
-      } else {
-        return {code_snippet:""};
-      }
+      // The backend returns { template: "...", language: "..." }
+      // We'll return just the template string for simplicity,
+      // but you can also return the whole object if you need the language later.
+      return {
+        code_snippet: response.data.template || "",
+        language: response.data.language,
+      };
     } catch (error) {
-      // Handle errors
-      return rejectWithValue(error.response ? error.response.data : error.message);
+      return rejectWithValue(
+        error.response?.data || error.message || "Failed to fetch template"
+      );
     }
   }
 );

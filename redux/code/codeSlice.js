@@ -1,9 +1,10 @@
-// codingspaceSlice.js or slice file
+// codingspaceSlice.js
 import { createSlice } from "@reduxjs/toolkit";
-import { postDefaultCode } from "./action"; // Adjust the import based on your file structure
+import { fetchDefaultCode } from "./action"; // adjust path if needed
 
 const initialState = {
-  defaultCode: null, // To store the default code
+  defaultCode: "",         // stores the template string
+  language: null,          // optional: keep track of the language returned by backend
   isLoading: false,
   error: null,
 };
@@ -11,23 +12,31 @@ const initialState = {
 const codingspaceSlice = createSlice({
   name: "codingspace",
   initialState,
-  reducers: {},
+  reducers: {
+    // Optional: clear the template manually
+    clearDefaultCode: (state) => {
+      state.defaultCode = "";
+      state.language = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(postDefaultCode.pending, (state) => {
+      .addCase(fetchDefaultCode.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(postDefaultCode.fulfilled, (state, action) => {
+      .addCase(fetchDefaultCode.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.defaultCode = action.payload; // Store the default code in state
-        state.error = null;
+        state.defaultCode = action.payload.code_snippet;
+        state.language = action.payload.language; // you may or may not need this
       })
-      .addCase(postDefaultCode.rejected, (state, action) => {
+      .addCase(fetchDefaultCode.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload || action.error.message;
+        state.error = action.payload || "Unknown error";
+        state.defaultCode = ""; // optional: reset on error
       });
   },
 });
 
+export const { clearDefaultCode } = codingspaceSlice.actions;
 export default codingspaceSlice.reducer;
