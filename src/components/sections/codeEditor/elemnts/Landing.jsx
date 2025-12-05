@@ -38,6 +38,7 @@ const Landing = ({ problem }) => {
   const [theme, setTheme] = useState("cobalt");
   const [language, setLanguage] = useState(languageOptions[0]);
   const [msg, setmsg] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
 
   const enterPress = useKeyPress("Enter");
@@ -113,19 +114,21 @@ const Landing = ({ problem }) => {
         if(data.all_passed){
           // showSuccessToast();
           setOutputDetails(100);
+          setShowModal(true);
         }
         else{
 
           setOutputDetails(0);
           const errorMsg = processResults(data.results);
           setmsg(errorMsg===""&&data.error?data.error:errorMsg);
+          setShowModal(true);
         }
         //setOutputDetails(data.percentage || 0); // Set default code on success
       })
       .catch((err) => {
         console.log("Error fetching default code:", err);
       });
-    // if (!is_test) { window.location.reload(); }
+    if (!is_test) { window.location.reload(); }
 
   };
 
@@ -223,7 +226,7 @@ const Landing = ({ problem }) => {
         func={(is_test) => handleCompile(code, language, is_test)}
         value={outputDetails ? outputDetails : 0}
       />
-      {outputDetails !== null && (
+      {showModal && (
         <div
           style={{
             position: "fixed",
@@ -285,7 +288,10 @@ const Landing = ({ problem }) => {
               </>
             )}
             <button
-               onClick={() => setOutputDetails(null)}
+               onClick={() => {
+                setmsg("");
+                setShowModal(false);
+               }}
               style={{
                 marginTop: "1.5rem",
                 padding: "0.5rem 1rem",
