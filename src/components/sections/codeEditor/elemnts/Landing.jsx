@@ -37,6 +37,8 @@ const Landing = ({ problem }) => {
   const [processing, setProcessing] = useState(null);
   const [theme, setTheme] = useState("cobalt");
   const [language, setLanguage] = useState(languageOptions[0]);
+  const [msg, setmsg] = useState("");
+
 
   const enterPress = useKeyPress("Enter");
   const ctrlPress = useKeyPress("Control");
@@ -78,6 +80,24 @@ const Landing = ({ problem }) => {
       }
     }
   };
+  const processResults = (results) => {
+    if (!results || results.length === 0) return "";
+    
+    // Find the first failed test with an error message
+    const failedTest = results.find(test => 
+      !test.passed || (test.error && test.error.trim() !== "")
+    );
+    
+    if (!failedTest) return "";
+    
+    if (failedTest.error && failedTest.error.trim() !== "") {
+      // If there's an error (like syntax error, runtime error)
+      return `Error: ${failedTest.error}`;
+    } else {
+      // If test failed but no error (just wrong output)
+      return `Input: ${failedTest.input}\nActual: ${failedTest.actual}\nExpected: ${failedTest.expected}`;
+    }
+  };
 
   const handleCompile = (code, language, is_test) => {
     setProcessing(true);
@@ -89,13 +109,16 @@ const Landing = ({ problem }) => {
     dispatch(testcode({ problem_id: problem.id, data: formData, is_test }))
       .unwrap()
       .then((data) => {
-        console.log(data)
+        console.log("data Landing:",data)
         if(data.all_passed){
           // showSuccessToast();
           setOutputDetails(100);
         }
         else{
-          
+
+          setOutputDetails(0);
+          const errorMsg = processResults(data.results);
+          setmsg(errorMsg===""&&data.error?data.error:errorMsg);
         }
         //setOutputDetails(data.percentage || 0); // Set default code on success
       })
@@ -231,19 +254,38 @@ const Landing = ({ problem }) => {
                 <h2 style={{ color: "#4caf50", marginBottom: "1rem" }}>
                   Success!
                 </h2>
-                <p>You got everything right!</p>
+                <p></p>
               </>
             ) : (
               <>
                 <h2 style={{ color: "#f44336", marginBottom: "1rem" }}>
                   Keep Trying
                 </h2>
-                <p>Your score: {outputDetails}%</p>
-                <p>Check your logic and try again.</p>
+                {/* <p>Your score: {outputDetails}%</p> */}
+                {msg && (
+            <div style={{
+              backgroundColor: "rgba(255, 0, 0, 0.1)",
+              padding: "1rem",
+              borderRadius: "6px",
+              marginBottom: "1.5rem",
+              fontFamily: "monospace",
+              whiteSpace: "pre-wrap",
+              wordBreak: "break-word",
+              fontSize: "0.9rem",
+              lineHeight: "1.5",
+              textAlign: "left",
+            }}>
+              {msg}
+            </div>
+          )}
+          
+          <p style={{ textAlign: "center", marginBottom: "1.5rem", color: "#aaa" }}>
+            Check your logic and try again.
+          </p>
               </>
             )}
             <button
-              onClick={() => setOutputDetails(null)}
+               onClick={() => setOutputDetails(null)}
               style={{
                 marginTop: "1.5rem",
                 padding: "0.5rem 1rem",
