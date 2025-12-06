@@ -247,7 +247,7 @@ const PlayerList = ({ players, infHUD }) => {
         avatar={"https://via.placeholder.com/44x44"}
         username={player?.user?.username || "Unknown"} // Safe access
         status={index+1 <= 11 ? "Qualified" : "Eliminated"} // Fix logic
-        score={player?.pionts || 0} // Default to 0 if points is undefined
+        score={player?.points || 0} // Default to 0 if points is undefined
         highlight={false} // Fix typo
         infHUD={infHUD}
       />
