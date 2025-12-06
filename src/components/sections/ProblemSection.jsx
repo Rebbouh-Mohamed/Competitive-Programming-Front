@@ -282,7 +282,6 @@ function ProblemSection({ problems, handleProblemClick }) {
       (sum, problem) => sum + problem.percentage,
       0
     );
-    console.log("total"+solvableProblems.length)
     return solvableProblems.length > 0 ? totalAccuracy / problems.length : 0; // Avoid division by zero
   };
   const styles = {
@@ -377,13 +376,14 @@ function ProblemSection({ problems, handleProblemClick }) {
       </div>
       <div style={styles.content}>
         {problems.map((problem, index) => (
+          
           <ProblemCard
             key={index}
             title={problem.title || `Problem ${index + 1}`}
             difficulty={problem.level || "Medium"}
             accuracy={problem.percentage || 0}
-            subbmitted={problem.submitted}
-            onClick={(e) => !problem.submitted?handleProblemClick(problem.id):e.preventDefault()} // Pass problem ID
+            subbmitted={problem.status==="solved"}
+            onClick={(e) => !(problem.status==="solved")?handleProblemClick(problem.id):e.preventDefault()} // Pass problem ID
           />
         ))}
       </div>

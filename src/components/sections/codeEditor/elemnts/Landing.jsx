@@ -127,8 +127,11 @@ const Landing = ({ problem }) => {
       })
       .catch((err) => {
         console.log("Error fetching default code:", err);
-      });
-    if (!is_test) { window.location.reload(); }
+      })
+      .finally(()=>{
+        if (!is_test) { window.location.reload(); }
+      })
+    // if (!is_test) { window.location.reload(); }
 
   };
 
