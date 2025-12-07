@@ -111,7 +111,7 @@ const Landing = ({ problem }) => {
       .unwrap()
       .then((data) => {
         console.log("data Landing:",data)
-        if(data.all_passed){
+        if (is_test){if(data.all_passed){
           // showSuccessToast();
           setOutputDetails(100);
           setShowModal(true);
@@ -122,7 +122,7 @@ const Landing = ({ problem }) => {
           const errorMsg = processResults(data.results);
           setmsg(errorMsg===""&&data.error?data.error:errorMsg);
           setShowModal(true);
-        }
+        }}
         //setOutputDetails(data.percentage || 0); // Set default code on success
       })
       .catch((err) => {
