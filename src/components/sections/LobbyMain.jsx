@@ -25,6 +25,7 @@ function sliceArray(arr, size = 12) {
 import rules from "../../data/rules.json";
 
 // LobbyMain.jsx
+import TournamentTree from "./tournament/TournamentTree";
 import whiteright from "../../assets/icons/whiteright.svg";
 import whiteleft from "../../assets/icons/whiteleft.svg";
 import bluecheck from "../../assets/icons/bluecheck.svg";
@@ -127,7 +128,7 @@ const Pagination = ({ page, onPrevClick, onNextClick, totalPages }) => {
     </div>
   );
 };
-const LobbyMain = () => {
+const LobbyMain = ({ Contest }) => {
   const styles = {
     container: {
       display: "flex",
@@ -326,45 +327,54 @@ const LobbyMain = () => {
         </div>
       </div>
       <div style={styles.joinedPlayersSection}>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            width: "100%",
-          }}
-        >
-          <h2 style={styles.playersTitle}>Joined players</h2>
-          <p style={styles.waitingMessage}>Waiting for players to join...</p>
-        </div>
-        <div style={styles.playersContainer}>
-          {playersChunks[page - 1]?.map((player, index) => (
-            <div
-              key={index}
-              style={styles.playerCardIsCurrentMultip(player.username ==localStorage.getItem(USERNAME))}
-            >
-              <img
-                src={"https://via.placeholder.com/96x96"}
-                alt={player.username}
-                style={styles.playerAvatar}
-              />
-              <div style={styles.playerUsername}>{player.username}</div>
-              <div style={styles.playerStatus(player.username ==localStorage.getItem(USERNAME))}>
-                {player.username ==localStorage.getItem(USERNAME)  ? "Ready" : "Joining..."}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {totalPages > 1 ? (
-          <Pagination
-            page={page}
-            onPrevClick={handlePrevClick}
-            onNextClick={handleNextClick}
-            totalPages={totalPages}
-          />
+        {Contest?.contest?.type === 'cup' ? (
+          <div style={{ width: '100%' }}>
+            <h2 style={styles.playersTitle}>Tournament Bracket</h2>
+            <TournamentTree contestId={Contest.contest.id} />
+          </div>
         ) : (
-          ""
+          <>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
+              <h2 style={styles.playersTitle}>Joined players</h2>
+              <p style={styles.waitingMessage}>Waiting for players to join...</p>
+            </div>
+            <div style={styles.playersContainer}>
+              {playersChunks[page - 1]?.map((player, index) => (
+                <div
+                  key={index}
+                  style={styles.playerCardIsCurrentMultip(player.username == localStorage.getItem(USERNAME))}
+                >
+                  <img
+                    src={"https://via.placeholder.com/96x96"}
+                    alt={player.username}
+                    style={styles.playerAvatar}
+                  />
+                  <div style={styles.playerUsername}>{player.username}</div>
+                  <div style={styles.playerStatus(player.username == localStorage.getItem(USERNAME))}>
+                    {player.username == localStorage.getItem(USERNAME) ? "Ready" : "Joining..."}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {totalPages > 1 ? (
+              <Pagination
+                page={page}
+                onPrevClick={handlePrevClick}
+                onNextClick={handleNextClick}
+                totalPages={totalPages}
+              />
+            ) : (
+              ""
+            )}
+          </>
         )}
       </div>
     </div>

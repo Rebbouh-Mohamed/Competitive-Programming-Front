@@ -4,6 +4,7 @@ import Landing from "../components/sections/codeEditor/elemnts/Landing.jsx";
 import GameHUD from "../components/sections/GameHUD.jsx";
 import ProblemSection from "../components/sections/ProblemSection.jsx";
 import Push from "../components/sections/Push.jsx";
+import MatchInfo from "../components/sections/tournament/MatchInfo.jsx";
 import { getproblem } from "../../redux/problems/action.js";
 import { getUpcomingContest } from "../../redux/contests/action"; // Action to get the contest data
 
@@ -91,10 +92,20 @@ const GRound = ({ Day = 0, Time }) => {
           {!showLanding ? (
             <Landing problem={selectedProblem} /> // Pass selected problem safely
           ) : (
-            <ProblemSection
-              problems={problems}
-              handleProblemClick={handleProblemClick} // Handle problem click
-            />
+            upcomingContest?.contest?.type === 'cup' || upcomingContest?.contest?.type === 'arena' ? (
+              <MatchInfo
+                contestId={upcomingContest.contest.id}
+                onStartProblem={(problem) => {
+                  setSelectedProblem(problem);
+                  setShowLanding(false);
+                }}
+              />
+            ) : (
+              <ProblemSection
+                problems={problems}
+                handleProblemClick={handleProblemClick} // Handle problem click
+              />
+            )
           )}
 
         </>
