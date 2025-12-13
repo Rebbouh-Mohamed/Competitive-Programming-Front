@@ -9,7 +9,6 @@ export const fetchContestDashboard = createAsyncThunk(
     try {
       const res = await api.get(`/api/board/contest_id/${contestId}`);
       
-      console.log('API response:', res); // Log the API response
       
       if (res.status === 200) {
         return res.data;
@@ -17,7 +16,6 @@ export const fetchContestDashboard = createAsyncThunk(
         return rejectWithValue("Failed to fetch contest dashboard");
       }
     } catch (error) {
-      console.log('API error:', error); // Log the error
       return rejectWithValue(error.response ? error.response.data : error.message);
     }
   }

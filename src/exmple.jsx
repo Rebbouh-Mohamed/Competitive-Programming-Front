@@ -23,7 +23,6 @@ function App() {
   useEffect(() => {
     window.scroll(0, 1);
   }, [location.pathname]);
-  console.log(location.pathname);
   function Logged() {
     if (location.pathname !== "/login") 
       return <Navbar />;

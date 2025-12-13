@@ -114,7 +114,6 @@ const GameHUD = ({
   useEffect(() => {
     const startTime = Time.startTime;
     const endTime = Time.endTime;
-    //console.log(Time);
     const calculateTimeLeft = () => {
       const now = new Date();
       const endDate = new Date(endTime);

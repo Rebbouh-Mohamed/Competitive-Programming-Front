@@ -35,14 +35,7 @@ const GRound = ({ Day = 0, Time }) => {
   useEffect(() => {
     // Log the upcoming contest when it's available
     if (upcomingContest) {
-      /* console.log(
-        upcomingContest
-          ? {
-              endTime: `${upcomingContest?.data?.contest?.end_time}`,
-              startTime: `${upcomingContest?.data?.contest?.start_time}`,
-            }
-          : ""
-      ); */
+
     }
   }, [upcomingContest]);
   const [showLanding, setShowLanding] = useState(true);
@@ -65,34 +58,29 @@ const GRound = ({ Day = 0, Time }) => {
         ws = new WebSocket(wsUrl);
 
         ws.onopen = () => {
-          console.log("✅ Connected to Match WebSocket for Cup contest");
+
         };
 
         ws.onmessage = (event) => {
-          console.log("========================================");
-          console.log("📨 RAW WebSocket message received");
-          console.log("📨 Raw data:", event.data);
+
 
           try {
             const data = JSON.parse(event.data);
-            console.log("📨 PARSED data:", JSON.stringify(data, null, 2));
-            console.log("📨 data.type =", data.type);
+
 
             // Filter: Only process match_result messages, ignore debug/auth messages
             if (data.type === 'match_result') {
-              console.log("🏆🏆🏆 MATCH RESULT DETECTED! 🏆🏆🏆");
-              console.log("🏆 Result:", data.result);
-              console.log("🏆 Calling setMatchResultModal...");
+
               setMatchResultModal({ result: data.result });
-              console.log("🏆 setMatchResultModal called!");
+
             } else if (data.type === 'auth_success') {
-              console.log("✅ WebSocket Authenticated:", data.username);
+
             } else if (data.type === 'auth_warning') {
               console.warn("⚠️ WebSocket Auth Warning:", data.message);
             } else {
-              console.log("⏭️ Ignoring message with type:", data.type);
+
             }
-            console.log("========================================");
+
           } catch (error) {
             console.error("❌ Failed to parse WebSocket message:", error);
             console.error("❌ Raw data was:", event.data);
@@ -115,7 +103,7 @@ const GRound = ({ Day = 0, Time }) => {
 
       return () => {
         if (ws && ws.readyState === WebSocket.OPEN) {
-          console.log("🔌 Closing Match WebSocket");
+
           ws.close(1000, "Component unmounting");
         }
       };
@@ -129,7 +117,7 @@ const GRound = ({ Day = 0, Time }) => {
 
     if (isLoser) {
       // Loser: Redirect to lobby
-      console.log("🚪 Redirecting loser to /lobby");
+
       navigate('/lobby');
     } else {
       // Winner: Return to match info / lobby view
@@ -158,7 +146,7 @@ const GRound = ({ Day = 0, Time }) => {
   const handleProblemClick = (problemId) => {
     setSelectedProblemId(problemId);
     setSelectedProblem(problems.find((problem) => problem.id === problemId));
-    //console.log(selectedProblem);
+
     setShowLanding(false); // Switch to Landing component
   };
 

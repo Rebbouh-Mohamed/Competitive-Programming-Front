@@ -29,13 +29,11 @@ const TournamentTree = ({ contestId }) => {
             const ws = new WebSocket(wsUrl);
 
             ws.onopen = () => {
-                console.log(`Connected to Contest ${contestId} WebSocket`);
             };
 
             ws.onmessage = (event) => {
                 const data = JSON.parse(event.data);
                 if (data.type === 'tree_update') {
-                    console.log("Tree update received, refetching bracket...");
                     fetchBracket();
                 }
             };

@@ -67,7 +67,6 @@ const Login = () => {
     if (toastedon) {
       setToastMessagered("");
       setToastMessageyellow("");
-      console.log("handleInputChange")
       setToaston(false); // Close the toast
     }
   };

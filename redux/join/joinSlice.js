@@ -20,7 +20,6 @@ const contestSlice = createSlice({
         state.error = null;
       })
       .addCase(getUpcomingContest.fulfilled, (state, action) => {
-        console.log("Slice Fulfilled Action:", action);
         state.isLoading = false;
         state.upcomingContest = action.payload;
         state.error = null;
@@ -36,7 +35,6 @@ const contestSlice = createSlice({
         state.joinError = null;
       })
       .addCase(joinContest.fulfilled, (state, action) => {
-        console.log("Successfully joined contest:", action);
         state.isJoining = false;
       })
       .addCase(joinContest.rejected, (state, action) => {

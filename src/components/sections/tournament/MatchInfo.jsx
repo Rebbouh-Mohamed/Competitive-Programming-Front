@@ -17,7 +17,7 @@ const MatchInfo = ({ contestId, onStartProblem }) => {
                 const response = await api.get(`/contests/${contestId}/match/`);
                 if (response.data.success) {
                     setMatch(response.data.data);
-                    console.log("📊 Initial match data loaded:", response.data.data);
+
                 } else {
                     console.error("Failed to fetch match:", response.data.message);
                     setMatch(null);
@@ -41,22 +41,22 @@ const MatchInfo = ({ contestId, onStartProblem }) => {
             ws = new WebSocket(wsUrl);
 
             ws.onopen = () => {
-                console.log(`✅ Connected to Contest ${contestId} WebSocket (MatchInfo)`);
+
             };
 
             ws.onmessage = (event) => {
                 try {
                     const data = JSON.parse(event.data);
-                    console.log("📡 WebSocket message received:", data);
+
 
                     // Handle match updates
                     if (data.type === 'match_update') {
-                        console.log("🔄 Match updated, refreshing data...");
+
                         fetchMatch(); // Refresh match data on update
                     }
                     // Handle tree updates (also refresh match as it may have changed)
                     else if (data.type === 'tree_update') {
-                        console.log("🌳 Tree updated, refreshing match data...");
+
                         fetchMatch();
                     }
                     // Silently ignore debug/auth messages
@@ -82,7 +82,7 @@ const MatchInfo = ({ contestId, onStartProblem }) => {
         // Cleanup function
         return () => {
             if (ws && ws.readyState === WebSocket.OPEN) {
-                console.log("🔌 Closing Contest WebSocket (MatchInfo)");
+
                 ws.close(1000, "Component unmounting");
             }
         };

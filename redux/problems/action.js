@@ -7,7 +7,6 @@ export const getproblem = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await api.get(`/problems/problems/`);///problems/problems/
-      //console.log(response)
       if (response.status === 200) {
         return response.data.data; // You can return any success data if needed
       }

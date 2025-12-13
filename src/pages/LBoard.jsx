@@ -24,7 +24,6 @@ const LBoard = () => {
       .then((data) => {
         setday(data.contest?.name || "-1"); // Use optional chaining for safety
         setplayers(data.leaderboard || []); // Default to empty array if undefined
-        console.log("Fetched data:", Object.keys(data));
       })
       .catch((err) => {
         console.error("Error fetching leaderboard:", err);

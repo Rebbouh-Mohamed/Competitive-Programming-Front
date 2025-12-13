@@ -9,7 +9,6 @@ export const joinContest = createAsyncThunk(
       // Make the API call to join the contest
       const response = await api.post(`/contests/${contestId}/join/`);
       if (response.status === 201) {
-        console.log(`Successfully joined contest ${contestId}`);
         return response.data; // You can return any success data if needed
       }
       // If the response is not 201, reject the join

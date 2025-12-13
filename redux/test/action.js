@@ -7,7 +7,6 @@ export const testcode = createAsyncThunk(
     const url = is_test
     ? `/submissions/${problem_id}/run/`
     : `/submissions/${problem_id}/submit/`;
-    console.log("API URL:", url);
 
     try {
       const response = await api.post(url,data);

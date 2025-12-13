@@ -28,9 +28,9 @@ const Landing = ({ problem }) => {
 
   const [code, setCode] = useState(defaultcode);
   const toggleRefresh = () => {
-    console.log("Refreshing...");
+
     onChange("code", defaultcode);
-    console.log(code);
+
   };
 
   const [customInput, setCustomInput] = useState("");
@@ -65,8 +65,8 @@ const Landing = ({ problem }) => {
 
   useEffect(() => {
     if (enterPress && ctrlPress) {
-      console.log("enterPress", enterPress);
-      console.log("ctrlPress", ctrlPress);
+
+
       // handleCompile();
     }
   }, [ctrlPress, enterPress]);
@@ -103,7 +103,7 @@ const Landing = ({ problem }) => {
 
   const handleCompile = (code, language, is_test) => {
     setProcessing(true);
-    console.log("istest" + is_test);
+
     const formData = {
       language: language.lang,
       code: code,
@@ -111,7 +111,7 @@ const Landing = ({ problem }) => {
     dispatch(testcode({ problem_id: problem.id, data: formData, is_test }))
       .unwrap()
       .then((data) => {
-        console.log("data Landing:", data)
+
         if (is_test) {
           if (data.all_passed) {
             // showSuccessToast();
@@ -129,7 +129,7 @@ const Landing = ({ problem }) => {
         //setOutputDetails(data.percentage || 0); // Set default code on success
       })
       .catch((err) => {
-        console.log("Error fetching default code:", err);
+
       })
       .finally(() => {
         if (!is_test && upcomingContest?.contest?.type !== 'cup') {
@@ -144,7 +144,7 @@ const Landing = ({ problem }) => {
 
   function handleThemeChange(th) {
     const theme = th;
-    console.log("theme...", theme);
+
 
     if (["light", "vs-dark"].includes(theme.value)) {
       setTheme(theme);

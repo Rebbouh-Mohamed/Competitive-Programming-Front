@@ -18,7 +18,6 @@ const problemsSlice = createSlice({
         state.error = null;
       })
       .addCase(testcode.fulfilled, (state, action) => {
-        //console.log("Slice Fulfilled Action:", action);
         state.isLoading = false; // Set loading to false when data is fetched
         state.problems = action.payload; // Save the fetched problems in state
         state.error = null;

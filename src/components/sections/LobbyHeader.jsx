@@ -54,7 +54,6 @@ const LobbyHeader = React.memo(({ Contest }) => {
       navigate("/game-round")
     } else {
       // Handle inactive contest, you can show a message or alert here
-      console.log("Contest is not active yet.");
     }
   };
 

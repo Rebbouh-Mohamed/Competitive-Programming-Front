@@ -18,7 +18,6 @@ const contestSlice = createSlice({
         state.error = null;
       })
       .addCase(getUpcomingContest.fulfilled, (state, action) => {
-        console.log("Slice Fulfilled Action:", action);
         state.isLoading = false;
         state.upcomingContest = action.payload;
         state.error = null;
