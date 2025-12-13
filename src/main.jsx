@@ -17,6 +17,7 @@ import Lobby from "./pages/Lobby.jsx";
 import LBoard from "./pages/LBoard.jsx";
 import GRound from "./pages/GRound.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
+import AdminPage from "./pages/AdminPage.jsx";
 
 
 const authStore = createStore({
@@ -50,7 +51,7 @@ const router = createBrowserRouter([
         path: "game-round",
         element: (
           <ProtectedRoute>
-            <GRound  Day={Day} Time={Time} />
+            <GRound Day={Day} Time={Time} />
           </ProtectedRoute>
         ),
       },
@@ -58,7 +59,15 @@ const router = createBrowserRouter([
         path: "leaderboard",
         element: (
           <ProtectedRoute>
-            <LBoard/>
+            <LBoard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "admin",
+        element: (
+          <ProtectedRoute>
+            <AdminPage />
           </ProtectedRoute>
         ),
       },

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../../../context/api";
+import getWebSocketUrl from "../../../utils/websocket";
 import { USERNAME } from "../../../context/constant";
 
 const MatchInfo = ({ contestId, onStartProblem }) => {
@@ -8,28 +9,83 @@ const MatchInfo = ({ contestId, onStartProblem }) => {
     const currentUser = localStorage.getItem(USERNAME);
 
     useEffect(() => {
+        if (!contestId) return;
+
+        // Initial fetch to get current match data immediately
         const fetchMatch = async () => {
             try {
                 const response = await api.get(`/contests/${contestId}/match/`);
                 if (response.data.success) {
                     setMatch(response.data.data);
+                    console.log("📊 Initial match data loaded:", response.data.data);
                 } else {
                     console.error("Failed to fetch match:", response.data.message);
                     setMatch(null);
                 }
             } catch (error) {
                 console.error("Error fetching match:", error);
+                setMatch(null);
             } finally {
                 setLoading(false);
             }
         };
 
-        if (contestId) {
-            fetchMatch();
-            // Poll for updates every 10 seconds
-            const interval = setInterval(fetchMatch, 10000);
-            return () => clearInterval(interval);
+        // Fetch initial data
+        fetchMatch();
+
+        // Connect to WebSocket for real-time updates
+        const wsUrl = getWebSocketUrl(`/ws/contest/${contestId}/`);
+        let ws = null;
+
+        try {
+            ws = new WebSocket(wsUrl);
+
+            ws.onopen = () => {
+                console.log(`✅ Connected to Contest ${contestId} WebSocket (MatchInfo)`);
+            };
+
+            ws.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    console.log("📡 WebSocket message received:", data);
+
+                    // Handle match updates
+                    if (data.type === 'match_update') {
+                        console.log("🔄 Match updated, refreshing data...");
+                        fetchMatch(); // Refresh match data on update
+                    }
+                    // Handle tree updates (also refresh match as it may have changed)
+                    else if (data.type === 'tree_update') {
+                        console.log("🌳 Tree updated, refreshing match data...");
+                        fetchMatch();
+                    }
+                    // Silently ignore debug/auth messages
+                } catch (error) {
+                    console.error("Failed to parse WebSocket message:", error);
+                }
+            };
+
+            ws.onerror = (error) => {
+                console.error("❌ WebSocket error (MatchInfo):", error);
+            };
+
+            ws.onclose = (event) => {
+                if (event.code !== 1000) {
+                    console.warn(`⚠️ WebSocket closed unexpectedly. Code: ${event.code}`);
+                }
+            };
+
+        } catch (error) {
+            console.error("❌ Failed to create WebSocket:", error);
         }
+
+        // Cleanup function
+        return () => {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                console.log("🔌 Closing Contest WebSocket (MatchInfo)");
+                ws.close(1000, "Component unmounting");
+            }
+        };
     }, [contestId]);
 
     if (loading) return <div style={{ color: 'white' }}>Loading Match Info...</div>;

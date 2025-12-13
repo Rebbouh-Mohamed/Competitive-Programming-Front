@@ -22,7 +22,7 @@ const CodeEditorWindow = ({ isScaled, onChange, language, code, theme }) => {
         height: "548px",
         alignItems: "flex-start",
         alignSelf: "stretch",
-        width: !isScaled ? "44.2rem": "1440px",
+        width: !isScaled ? "44.2rem" : "1440px",
         borderRadius: "0 0 16px 16px", // Add border radius
         overflow: "hidden", // Ensure content respects the border radius
         border: "none", // Optional: Add a border

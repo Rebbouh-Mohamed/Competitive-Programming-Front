@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import api from "../../../context/api";
+import getWebSocketUrl from "../../../utils/websocket";
 
 const TournamentTree = ({ contestId }) => {
     const [matches, setMatches] = useState([]);
     const [loading, setLoading] = useState(true);
-
     useEffect(() => {
         const fetchBracket = async () => {
             try {
@@ -23,6 +23,26 @@ const TournamentTree = ({ contestId }) => {
 
         if (contestId) {
             fetchBracket();
+
+            // Connect to Contest WebSocket
+            const wsUrl = getWebSocketUrl(`/ws/contest/${contestId}/`);
+            const ws = new WebSocket(wsUrl);
+
+            ws.onopen = () => {
+                console.log(`Connected to Contest ${contestId} WebSocket`);
+            };
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                if (data.type === 'tree_update') {
+                    console.log("Tree update received, refetching bracket...");
+                    fetchBracket();
+                }
+            };
+
+            return () => {
+                ws.close();
+            };
         }
     }, [contestId]);
 

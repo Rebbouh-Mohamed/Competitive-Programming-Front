@@ -12,13 +12,14 @@ import useKeyPress from "../hooks/useKeyPress";
 import LanguagesDropdown from "./LanguagesDropdown";
 import "./CodeEditorWindow.css";
 import { postDefaultCode } from "../../../../../redux/code/action";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Push from "../../Push";
 import { testcode } from "../../../../../redux/test/action";
 import { useNavigate } from "react-router-dom";
 
 const Landing = ({ problem }) => {
   const dispatch = useDispatch();
+  const { upcomingContest } = useSelector((state) => state.contests);
   const [isScaled, setIsScaled] = useState(false);
   const defaultcode = problem.codejs || "";
   const toggleScale = () => {
@@ -83,14 +84,14 @@ const Landing = ({ problem }) => {
   };
   const processResults = (results) => {
     if (!results || results.length === 0) return "";
-    
+
     // Find the first failed test with an error message
-    const failedTest = results.find(test => 
+    const failedTest = results.find(test =>
       !test.passed || (test.error && test.error.trim() !== "")
     );
-    
+
     if (!failedTest) return "";
-    
+
     if (failedTest.error && failedTest.error.trim() !== "") {
       // If there's an error (like syntax error, runtime error)
       return `Error: ${failedTest.error}`;
@@ -110,26 +111,30 @@ const Landing = ({ problem }) => {
     dispatch(testcode({ problem_id: problem.id, data: formData, is_test }))
       .unwrap()
       .then((data) => {
-        console.log("data Landing:",data)
-        if (is_test){if(data.all_passed){
-          // showSuccessToast();
-          setOutputDetails(100);
-          setShowModal(true);
-        }
-        else{
+        console.log("data Landing:", data)
+        if (is_test) {
+          if (data.all_passed) {
+            // showSuccessToast();
+            setOutputDetails(100);
+            setShowModal(true);
+          }
+          else {
 
-          setOutputDetails(0);
-          const errorMsg = processResults(data.results);
-          setmsg(errorMsg===""&&data.error?data.error:errorMsg);
-          setShowModal(true);
-        }}
+            setOutputDetails(0);
+            const errorMsg = processResults(data.results);
+            setmsg(errorMsg === "" && data.error ? data.error : errorMsg);
+            setShowModal(true);
+          }
+        }
         //setOutputDetails(data.percentage || 0); // Set default code on success
       })
       .catch((err) => {
         console.log("Error fetching default code:", err);
       })
-      .finally(()=>{
-        if (!is_test) { window.location.reload(); }
+      .finally(() => {
+        if (!is_test && upcomingContest?.contest?.type !== 'cup') {
+          window.location.reload();
+        }
       })
     // if (!is_test) { window.location.reload(); }
 
@@ -269,32 +274,32 @@ const Landing = ({ problem }) => {
                 </h2>
                 {/* <p>Your score: {outputDetails}%</p> */}
                 {msg && (
-            <div style={{
-              backgroundColor: "rgba(255, 0, 0, 0.1)",
-              padding: "1rem",
-              borderRadius: "6px",
-              marginBottom: "1.5rem",
-              fontFamily: "monospace",
-              whiteSpace: "pre-wrap",
-              wordBreak: "break-word",
-              fontSize: "0.9rem",
-              lineHeight: "1.5",
-              textAlign: "left",
-            }}>
-              {msg}
-            </div>
-          )}
-          
-          <p style={{ textAlign: "center", marginBottom: "1.5rem", color: "#aaa" }}>
-            Check your logic and try again.
-          </p>
+                  <div style={{
+                    backgroundColor: "rgba(255, 0, 0, 0.1)",
+                    padding: "1rem",
+                    borderRadius: "6px",
+                    marginBottom: "1.5rem",
+                    fontFamily: "monospace",
+                    whiteSpace: "pre-wrap",
+                    wordBreak: "break-word",
+                    fontSize: "0.9rem",
+                    lineHeight: "1.5",
+                    textAlign: "left",
+                  }}>
+                    {msg}
+                  </div>
+                )}
+
+                <p style={{ textAlign: "center", marginBottom: "1.5rem", color: "#aaa" }}>
+                  Check your logic and try again.
+                </p>
               </>
             )}
             <button
-               onClick={() => {
+              onClick={() => {
                 setmsg("");
                 setShowModal(false);
-               }}
+              }}
               style={{
                 marginTop: "1.5rem",
                 padding: "0.5rem 1rem",
