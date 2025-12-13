@@ -9,8 +9,9 @@ import warning from "../../assets/icons/warning.svg";
 const ProblemCard = ({
   title = "Problem title",
   difficulty = "Difficulty",
-  accuracy = -1,
-  subbmitted=false,
+  points = 0,
+  next_points = null,
+  subbmitted = false,
   onClick
 }) => {
 
@@ -39,8 +40,8 @@ const ProblemCard = ({
       backgroundColor: isPressed
         ? "#3b3b3b" // Darker color when pressing
         : isHovered
-        ? "#2c2c2c" // Lighter color when hovering
-        : "transparent", // Default color when normal
+          ? "#2c2c2c" // Lighter color when hovering
+          : "transparent", // Default color when normal
     },
     titleContainer: {
       flex: "1 1 0",
@@ -95,8 +96,8 @@ const ProblemCard = ({
         difficulty == "easy"
           ? "#32D74B"
           : difficulty == "mid"
-          ? "#FFD60A"
-          : "#FF453A",
+            ? "#FFD60A"
+            : "#FF453A",
       fontSize: 14,
       fontFamily: "Inter",
       fontWeight: "400",
@@ -124,7 +125,12 @@ const ProblemCard = ({
         </div>
         <div style={styles.detailsContainer}>
           <div style={styles.accuracyText}>
-            {accuracy == -1 ? 0 : accuracy}%
+            {points} pts
+            {next_points !== null && (
+              <span style={{ fontSize: 10, color: "#929292", marginLeft: 4 }}>
+                (Next: {next_points})
+              </span>
+            )}
           </div>
           <div style={styles.difficultyText}>{difficulty}</div>
         </div>
@@ -276,7 +282,7 @@ function ProblemSection({ problems, handleProblemClick }) {
   };
   const CalcAccuracy = () => {
     const solvableProblems = problems.filter(
-      (problem) => problem.submitted 
+      (problem) => problem.submitted
     );
     const totalAccuracy = solvableProblems.reduce(
       (sum, problem) => sum + problem.percentage,
@@ -370,20 +376,21 @@ function ProblemSection({ problems, handleProblemClick }) {
           <div style={styles.titleText}>Title</div>
         </div>
         <div style={styles.headerRight}>
-          <div style={styles.centerText}>Accuracy</div>
+          <div style={styles.centerText}>Points</div>
           <div style={styles.centerText}>Difficulty</div>
         </div>
       </div>
       <div style={styles.content}>
         {problems.map((problem, index) => (
-          
+
           <ProblemCard
             key={index}
             title={problem.title || `Problem ${index + 1}`}
             difficulty={problem.level || "Medium"}
-            accuracy={problem.percentage || 0}
-            subbmitted={problem.status==="solved"}
-            onClick={(e) => !(problem.status==="solved")?handleProblemClick(problem.id):e.preventDefault()} // Pass problem ID
+            points={problem.point || 0}
+            next_points={problem.next_point}
+            subbmitted={problem.status === "solved"}
+            onClick={(e) => !(problem.status === "solved") ? handleProblemClick(problem.id) : e.preventDefault()} // Pass problem ID
           />
         ))}
       </div>
