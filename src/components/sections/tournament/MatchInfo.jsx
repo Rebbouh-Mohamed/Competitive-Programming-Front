@@ -120,13 +120,18 @@ const MatchInfo = ({ contestId, onStartProblem }) => {
                 <div style={{ textAlign: 'center' }}>
                     <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: '#4CAF50', margin: '0 auto 10px' }}></div>
                     <h3 style={{ color: 'white' }}>You</h3>
+                    <h2 style={{ color: '#4CAF50', fontSize: '36px', margin: '10px 0' }}>{match.p1_score !== undefined ? (match.player1?.username === currentUser ? match.p1_score : match.p2_score) : 0}</h2>
                 </div>
 
-                <div style={{ color: '#FFD60A', fontSize: '24px', fontWeight: 'bold' }}>VS</div>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <div style={{ color: '#FFD60A', fontSize: '24px', fontWeight: 'bold' }}>VS</div>
+                    <div style={{ color: '#888', marginTop: '5px' }}>Best of 3</div>
+                </div>
 
                 <div style={{ textAlign: 'center' }}>
                     <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: '#F44336', margin: '0 auto 10px' }}></div>
                     <h3 style={{ color: 'white' }}>{opponent ? opponent.username : 'Waiting...'}</h3>
+                    <h2 style={{ color: '#F44336', fontSize: '36px', margin: '10px 0' }}>{match.p1_score !== undefined ? (match.player1?.username === currentUser ? match.p2_score : match.p1_score) : 0}</h2>
                 </div>
             </div>
 
@@ -134,7 +139,12 @@ const MatchInfo = ({ contestId, onStartProblem }) => {
                 <h3 style={{ color: '#E7E7E7' }}>Problem: {match.problem_title || 'Hidden'}</h3>
                 {match.problem_title && (
                     <button
-                        onClick={() => onStartProblem(match.problem)}
+                        onClick={() => onStartProblem(match.problem, {
+                            p1: match.p1_score || 0,
+                            p2: match.p2_score || 0,
+                            player1: match.player1,
+                            player2: match.player2
+                        })}
                         style={{
                             marginTop: '20px',
                             padding: '12px 32px',

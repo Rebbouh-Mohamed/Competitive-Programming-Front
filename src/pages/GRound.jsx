@@ -41,6 +41,7 @@ const GRound = ({ Day = 0, Time }) => {
   const [showLanding, setShowLanding] = useState(true);
   const [selectedProblemId, setSelectedProblemId] = useState(null); // Track selected problem
   const [selectedProblem, setSelectedProblem] = useState(null);
+  const [scores, setScores] = useState(null); // { p1: 0, p2: 0, player1: {}, player2: {} }
 
   // Cup contest match result modal state
   const [matchResultModal, setMatchResultModal] = useState(null); // null | { result: 'win' | 'loss' }
@@ -72,6 +73,31 @@ const GRound = ({ Day = 0, Time }) => {
             if (data.type === 'match_result') {
 
               setMatchResultModal({ result: data.result });
+
+            } else if (data.type === 'next_problem') {
+              // Handle transition to next problem
+              // Show a toast or modal?
+              // Let's use a toast for smoother transition or a small modal.
+              // For now, let's just update the problem and maybe show a toast.
+              // We need to import toast if not available, or use the modal state.
+
+              // Update selected problem
+              if (data.problem) {
+                setSelectedProblem(data.problem);
+                // Update scores if available
+                if (data.p1_score !== undefined) {
+                  setScores(prev => ({ ...prev, p1: data.p1_score, p2: data.p2_score }));
+                }
+                // Show notification
+                // We don't have toast imported here, but we can use alert or console for now, 
+                // or better, reuse matchResultModal with a special type?
+                // Or just let the UI update.
+                // Let's try to show a temporary modal or just let it switch.
+                // Ideally we want to notify the user.
+                // Let's assume the user notices the problem changed.
+                // But we should probably reset the editor state.
+                // By using key={selectedProblem.id} on Landing, it will reset.
+              }
 
             } else if (data.type === 'auth_success') {
 
@@ -171,13 +197,14 @@ const GRound = ({ Day = 0, Time }) => {
       ) : (
         <>
           {!showLanding ? (
-            <Landing problem={selectedProblem} /> // Pass selected problem safely
+            <Landing key={selectedProblem?.id} problem={selectedProblem} scores={scores} /> // Pass selected problem safely with key to force remount
           ) : (
             upcomingContest?.contest?.type === 'cup' ? (
               <MatchInfo
                 contestId={upcomingContest.contest.id}
-                onStartProblem={(problem) => {
+                onStartProblem={(problem, initialScores) => {
                   setSelectedProblem(problem);
+                  setScores(initialScores);
                   setShowLanding(false);
                 }}
               />

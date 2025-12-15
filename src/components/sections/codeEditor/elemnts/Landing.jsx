@@ -17,7 +17,7 @@ import Push from "../../Push";
 import { testcode } from "../../../../../redux/test/action";
 import { useNavigate } from "react-router-dom";
 
-const Landing = ({ problem }) => {
+const Landing = ({ problem, scores }) => {
   const dispatch = useDispatch();
   const { upcomingContest } = useSelector((state) => state.contests);
   const [isScaled, setIsScaled] = useState(false);
@@ -189,7 +189,33 @@ const Landing = ({ problem }) => {
       flexDirection: "column",
       justifyContent: "space-between",
       alignItems: "center",
+      width: "100%", // Ensure full width
     }}>
+      {/* Score Display for Cup Matches */}
+      {scores && (
+        <div style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "40px",
+          padding: "10px 20px",
+          background: "#2c2c2c",
+          borderRadius: "0 0 12px 12px",
+          marginBottom: "10px",
+          width: "60%",
+          boxShadow: "0 4px 6px rgba(0,0,0,0.3)"
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <div style={{ width: "12px", height: "12px", borderRadius: "50%", background: "#4CAF50" }}></div>
+            <span style={{ color: "white", fontWeight: "bold" }}>You: {scores.p1 !== undefined ? (scores.player1?.username === localStorage.getItem('username') ? scores.p1 : scores.p2) : 0}</span>
+          </div>
+          <span style={{ color: "#FFD60A", fontWeight: "bold" }}>VS</span>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <span style={{ color: "white", fontWeight: "bold" }}>{scores.player2 ? (scores.player1?.username === localStorage.getItem('username') ? scores.player2.username : scores.player1.username) : "Opponent"}: {scores.p1 !== undefined ? (scores.player1?.username === localStorage.getItem('username') ? scores.p2 : scores.p1) : 0}</span>
+            <div style={{ width: "12px", height: "12px", borderRadius: "50%", background: "#F44336" }}></div>
+          </div>
+        </div>
+      )}
 
       <div
         style={{
