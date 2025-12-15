@@ -63,6 +63,25 @@ const Landing = ({ problem, scores }) => {
       });
   };
 
+  // Fetch default code on mount if empty
+  useEffect(() => {
+    if (!code || code.trim() === "") {
+      dispatch(
+        postDefaultCode({
+          problemId: problem.id,
+          language: language.lang,
+        })
+      )
+        .unwrap()
+        .then((data) => {
+          setCode(data.code_snippet);
+        })
+        .catch((err) => {
+          console.error("Error fetching initial default code:", err);
+        });
+    }
+  }, [problem.id]); // Re-run if problem changes (though component remounts usually handle this)
+
   useEffect(() => {
     if (enterPress && ctrlPress) {
 

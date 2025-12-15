@@ -36,7 +36,7 @@ export const languageOptions = [
   },
   {
     label: "Pascal",
-    value: "Pascal",
+    value: "pascal",
     lang:"pas",
   }
 ];
