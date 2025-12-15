@@ -33,5 +33,10 @@ export const languageOptions = [
     label: "Python",
     value: "python",
     lang:"py",
+  },
+  {
+    label: "Pascal",
+    value: "Pascal",
+    lang:"pas",
   }
 ];
