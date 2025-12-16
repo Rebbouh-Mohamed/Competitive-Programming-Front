@@ -10,13 +10,13 @@ function Problem({
   constraints = "List the constraints for the problem.",
   exampleInput = "Provide an example input here.",
   exampleOutput = "Provide an example output here.",
-  codejs=""
+  codejs = ""
 }) {
   if (problem) {
     goal = problem.description;
     input = problem.input_desc;
     output = problem.output_desc;
-    codejs=problem.codejs;
+    codejs = problem.codejs;
     constraints = problem.constraint;
     exampleInput = problem.input_exp;
     exampleOutput = problem.output_exp;
@@ -28,12 +28,12 @@ function Problem({
 
       width: "50%",
       borderRadius: 16,
-      overflow: "hidden",
+      overflowY: "auto", // Enable vertical scrolling
       display: isScaled ? "none" : "flex",
       flexDirection: "column",
-      justifyContent: "space-between",
+      justifyContent: "flex-start", // Start from top
       alignItems: "stretch",
-      transform: "none", // Correct syntax for `transform`
+      transform: "none",
     },
     goalSection: {
       display: "flex",
@@ -41,8 +41,8 @@ function Problem({
       flexDirection: "column",
       gap: "16px",
       alignSelf: "stretch",
-      justifyContent: "space-between",
-      height: "90%",
+      justifyContent: "flex-start", // Let content stack naturally
+      // height: "90%", // Remove fixed height
       background: "var(--White-12, rgba(255, 255, 255, 0.12))",
     },
     headerRow: {
@@ -74,7 +74,7 @@ function Problem({
       padding: "24px 0px",
       flexDirection: "column",
       alignItems: "flex-start",
-      height: "90%",
+      // height: "90%", // Remove fixed height
       alignSelf: "stretch",
       borderRadius: "0px 0px 0px 0px",
       background: "var(--White-16, rgba(255, 255, 255, 0.16))",
