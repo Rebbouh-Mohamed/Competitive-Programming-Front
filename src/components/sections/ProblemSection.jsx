@@ -11,6 +11,7 @@ const ProblemCard = ({
   difficulty = "Difficulty",
   points = 0,
   next_points = null,
+  percentage = null,
   subbmitted = false,
   onClick
 }) => {
@@ -38,10 +39,10 @@ const ProblemCard = ({
       alignItems: "center",
       display: "flex",
       backgroundColor: isPressed
-        ? "#3b3b3b" // Darker color when pressing
+        ? "#3b3b3b"
         : isHovered
-          ? "#2c2c2c" // Lighter color when hovering
-          : "transparent", // Default color when normal
+          ? "#2c2c2c"
+          : "transparent",
     },
     titleContainer: {
       flex: "1 1 0",
@@ -89,6 +90,15 @@ const ProblemCard = ({
       fontWeight: "400",
       wordWrap: "break-word",
     },
+    percentageText: {
+      flex: "1 1 0",
+      textAlign: "center",
+      color: "#E7E7E7",
+      fontSize: 14,
+      fontFamily: "Inter",
+      fontWeight: "400",
+      wordWrap: "break-word",
+    },
     difficultyText: {
       flex: "1 1 0",
       textAlign: "center",
@@ -109,7 +119,7 @@ const ProblemCard = ({
     <div style={styles.container}>
       <button
         style={styles.innerContainer}
-        onClick={onClick} // Trigger the onClick handler
+        onClick={onClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onMouseDown={() => setIsPressed(true)}
@@ -132,6 +142,9 @@ const ProblemCard = ({
               </span>
             )}
           </div>
+          <div style={styles.percentageText}>
+            {percentage !== null ? `${percentage}%` : '-'}
+          </div>
           <div style={styles.difficultyText}>{difficulty}</div>
         </div>
       </button>
@@ -146,7 +159,6 @@ function ProgressBar({ Subbmition, TotalProblems, accuracy }) {
   const [feedbackColor, setFeedbackColor] = useState("#929292");
   const [feedbackIcon, setFeedbackIcon] = useState(null);
 
-  // Function to get feedback based on submission score
   const getFeedback = (score) => {
     if (score >= 80) {
       return {
@@ -179,7 +191,7 @@ function ProgressBar({ Subbmition, TotalProblems, accuracy }) {
       setFeedbackIcon(icon);
     }, 1500);
 
-    return () => clearTimeout(timeoutId); // Cleanup on unmount
+    return () => clearTimeout(timeoutId);
   }, [Subbmition]);
 
   const isChecking =
@@ -276,9 +288,10 @@ function ProgressBar({ Subbmition, TotalProblems, accuracy }) {
     </div>
   );
 }
+
 function ProblemSection({ problems, handleProblemClick }) {
   const CalcSubmission = () => {
-    return problems.filter((problem) => problem.submitted).length;
+    return problems.filter((problem) => problem.status=="solved").length;
   };
   const CalcAccuracy = () => {
     const solvableProblems = problems.filter(
@@ -288,7 +301,7 @@ function ProblemSection({ problems, handleProblemClick }) {
       (sum, problem) => sum + problem.percentage,
       0
     );
-    return solvableProblems.length > 0 ? totalAccuracy / problems.length : 0; // Avoid division by zero
+    return solvableProblems.length > 0 ? totalAccuracy / problems.length : 0;
   };
   const styles = {
     container: {
@@ -377,20 +390,21 @@ function ProblemSection({ problems, handleProblemClick }) {
         </div>
         <div style={styles.headerRight}>
           <div style={styles.centerText}>Points</div>
+          <div style={styles.centerText}>Percentage</div>
           <div style={styles.centerText}>Difficulty</div>
         </div>
       </div>
       <div style={styles.content}>
         {problems.map((problem, index) => (
-
           <ProblemCard
             key={index}
             title={problem.title || `Problem ${index + 1}`}
             difficulty={problem.level || "Medium"}
             points={problem.point || 0}
             next_points={problem.next_point}
+            percentage={problem.percentage ?? null}
             subbmitted={problem.status === "solved"}
-            onClick={(e) => !(problem.status === "solved") ? handleProblemClick(problem.id) : e.preventDefault()} // Pass problem ID
+            onClick={(e) => !(problem.status === "solved") ? handleProblemClick(problem.id) : e.preventDefault()}
           />
         ))}
       </div>

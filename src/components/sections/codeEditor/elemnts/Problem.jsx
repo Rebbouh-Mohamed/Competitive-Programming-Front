@@ -14,8 +14,8 @@ function Problem({
 }) {
   if (problem) {
     goal = problem.description;
-    input = problem.input_desc;
-    output = problem.output_desc;
+    input = problem.input_description;
+    output = problem.output_description;
     codejs = problem.codejs;
     constraints = problem.constraint;
     exampleInput = problem.input_exp;
@@ -139,7 +139,7 @@ function Problem({
       lineHeight: "20px",
     },
   };
-
+  console.log("output", problem);
   return (
     <div style={styles.container}>
       <div style={styles.goalSection}>
